@@ -49,7 +49,6 @@ bool RenderManager::startUp()
     }
     else
     {
-
         return false;
     }
 
@@ -58,6 +57,7 @@ bool RenderManager::startUp()
 
 bool RenderManager::shutDown()
 {
+    m_allocator.clear();
     return true;
 }
 

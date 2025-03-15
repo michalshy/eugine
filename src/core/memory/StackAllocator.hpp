@@ -30,6 +30,11 @@ public:
         ZeroMemory(m_memory + m_marker, m_marker - m_markers[m_markerIndex--]);
         m_marker -= size;
     }
+    void clear()
+    {
+        ZeroMemory(m_memory, STACK_ALLOCATOR_SIZE);
+        m_marker = 0;
+    }
     ~StackAllocator(){}
 
 private:
