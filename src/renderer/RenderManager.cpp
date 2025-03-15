@@ -38,9 +38,18 @@ bool RenderManager::startUp()
     glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 
     //TODO: provide rendered from configuration
-    m_renderer = new RendererGL();
-    if(!m_renderer->startUp())
+    void* addr = m_allocator.alloc(sizeof(RendererGL));
+    if(addr != nullptr)
     {
+        m_renderer = new (addr) RendererGL();
+        if(!m_renderer->startUp())
+        {
+            return false;
+        }
+    }
+    else
+    {
+
         return false;
     }
 

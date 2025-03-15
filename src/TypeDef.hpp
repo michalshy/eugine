@@ -10,4 +10,13 @@ using i16 = short;
 using i32 = int;
 using i64 = long long;
 
+static void ZeroMemory(void* ptr, u32 size)
+{
+    u8* p = static_cast<u8*>(ptr);
+    for(u32 i = 0; i < size; i++)
+    {
+        p[i] = 0;
+    }
+}
+
 #endif // TYPEDEF_HPP

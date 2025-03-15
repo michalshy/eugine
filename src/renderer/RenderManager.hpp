@@ -3,14 +3,15 @@
 
 #include "common/Renderer.hpp"
 #include "gl_renderer/RendererGL.hpp"
+#include "../core/memory/StackAllocator.hpp"
 #include <GLFW/glfw3.h>
 
 class RenderManager
 {
+    StackAllocator m_allocator;
     GLFWwindow* m_window;
     Renderer* m_renderer;
 public:
-
     RenderManager();
     bool startUp();
     bool shutDown();
