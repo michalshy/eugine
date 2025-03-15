@@ -1,11 +1,11 @@
-#include "idk.hpp"
+#include "Eugine.hpp"
 
-Idk::Idk()
+Eugine::Eugine()
 {
 
 }
 
-bool Idk::init()
+bool Eugine::init()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -35,7 +35,7 @@ bool Idk::init()
     return true;
 }
 
-void Idk::run()
+void Eugine::run()
 {
     while(!glfwWindowShouldClose(window))
     {
@@ -51,18 +51,18 @@ void Idk::run()
     }
 }
 
-Idk::~Idk()
+Eugine::~Eugine()
 {
 
 }
 
-void Idk::processInput(GLFWwindow *window)
+void Eugine::processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
 
-void Idk::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void Eugine::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }

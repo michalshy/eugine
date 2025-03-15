@@ -1,8 +1,8 @@
-#include "Idk.hpp"
+#include "Eugine.hpp"
 
 int main()
 {
-    Idk eng;
+    Eugine eng;
     if(!eng.init())
         return -1;
     eng.run();

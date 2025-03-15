@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.20)
 
 # Configure project
 set(CMAKE_CXX_STANDARD 17)
-project(idk_eng)
+project(eugine)
 
 # Include directiories
 include_directories(${OPENGL_INCLUDE_DIRS}
-                    include/idk
+                    include/eugine
                     include/third_party/image
                     include/third_party/KHR
                     include/third_party)
@@ -38,9 +38,9 @@ set(SOURCE_FILES
     src/main.cpp
     ${SRCs})
 
-add_executable(idk_eng ${SOURCE_FILES})
+add_executable(eugine ${SOURCE_FILES})
 
-target_link_libraries(idk_eng
+target_link_libraries(eugine
 	${OPENGL_LIBRARY} # filled by "find_package(OpenGL REQUIRED)"
     glm::glm
     glfw

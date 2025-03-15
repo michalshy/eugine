@@ -5,16 +5,16 @@
 #include "camera/Camera.hpp"
 #include <GLFW/glfw3.h>
 
-class Idk
+class Eugine
 {
     GLFWwindow* window;
 public:
-    Idk();
+    Eugine();
 
     bool init();
     void run();
 
-    ~Idk();
+    ~Eugine();
 
 protected:
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
