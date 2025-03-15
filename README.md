@@ -1,4 +1,5 @@
-# 3D Game Engine Built on OpenGL, GLM, GLFW, GLAD, and PhysX
+# EUGINE GAME ENGINE
+## 3D built on OpenGL, GLM, GLFW, GLAD, and PhysX
 
 This repository contains the source code for a custom 3D game engine built on top of several powerful libraries, including **OpenGL**, **GLM**, **GLFW**, **GLAD**, and **PhysX**. The engine is designed to provide developers with the tools they need to create high-performance 3D games and simulations.
 
@@ -18,7 +19,7 @@ To get started, simply clone this repository and follow the build instructions i
 ### Getting Started:
 - Clone the repository:  
   ```bash
-  git clone https://github.com/your-username/3d-game-engine.git
+  git clone https://github.com/michalshy/eugine.git
   ```
 - Follow the instructions to build the engine and set up your first 3D project.
 
