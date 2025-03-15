@@ -6,10 +6,10 @@ project(eugine)
 
 # Include directiories
 include_directories(${OPENGL_INCLUDE_DIRS}
-                    include/eugine
-                    include/third_party/image
-                    include/third_party/KHR
-                    include/third_party)
+                    include
+                    third_party/include/image
+                    third_party/include/KHR
+                    third_party/include)
 
 # Include libraries
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -30,6 +30,7 @@ find_package(OpenGL REQUIRED)
 # Search for files
 file(GLOB_RECURSE SRCs
        ${PROJECT_SOURCE_DIR}/src/*.cpp
+       ${PROJECT_SOURCE_DIR}/include/*.hpp
        ${PROJECT_SOURCE_DIR}/src/*.c
        ${PROJECT_SOURCE_DIR}/third_party/*.c
        ${PROJECT_SOURCE_DIR}/third_party/*.cpp)

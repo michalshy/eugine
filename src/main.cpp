@@ -3,8 +3,8 @@
 int main()
 {
     Eugine eng;
-    if(!eng.init())
+    if(!eng.boot())
         return -1;
-    eng.run();
+    eng.loop();
     return 0;
 }

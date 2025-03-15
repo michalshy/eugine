@@ -1,11 +1,6 @@
-#include "Eugine.hpp"
+#include "renderer/RenderManager.hpp"
 
-Eugine::Eugine()
-{
-
-}
-
-bool Eugine::init()
+bool RenderManager::startUp()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -13,7 +8,7 @@ bool Eugine::init()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create window
-    window = glfwCreateWindow(800, 600, "IDK", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "EUGINE", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -35,7 +30,12 @@ bool Eugine::init()
     return true;
 }
 
-void Eugine::run()
+bool RenderManager::shutDown()
+{
+    return true;
+}
+
+void RenderManager::render()
 {
     while(!glfwWindowShouldClose(window))
     {
@@ -51,18 +51,13 @@ void Eugine::run()
     }
 }
 
-Eugine::~Eugine()
-{
-
-}
-
-void Eugine::processInput(GLFWwindow *window)
+void RenderManager::processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
 
-void Eugine::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void RenderManager::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
