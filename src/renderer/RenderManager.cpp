@@ -1,4 +1,14 @@
-#include "renderer/RenderManager.hpp"
+#include "RenderManager.hpp"
+
+RenderManager::RenderManager()
+{
+    //Do nothing
+}
+
+RenderManager::~RenderManager()
+{
+    //Do nothing
+}
 
 bool RenderManager::startUp()
 {
@@ -8,14 +18,14 @@ bool RenderManager::startUp()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create window
-    window = glfwCreateWindow(800, 600, "EUGINE", NULL, NULL);
-    if (window == NULL)
+    m_window = glfwCreateWindow(800, 600, "EUGINE", NULL, NULL);
+    if (m_window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return false;
     }
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(m_window);
 
     // Setup GLAD
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -25,28 +35,36 @@ bool RenderManager::startUp()
     }
 
     glViewport(0, 0, 800, 600);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
+
+    //TODO: provide rendered from configuration
+    m_renderer = new RendererGL();
+    if(!m_renderer->startUp())
+    {
+        return false;
+    }
 
     return true;
 }
 
 bool RenderManager::shutDown()
 {
+    delete m_renderer;
     return true;
 }
 
 void RenderManager::render()
 {
-    while(!glfwWindowShouldClose(window))
+    while(!glfwWindowShouldClose(m_window))
     {
-        processInput(window);
+        processInput(m_window);
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-        //TODO: Render stuff here
+        m_renderer->render();
     
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
 }
@@ -57,7 +75,7 @@ void RenderManager::processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
-void RenderManager::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void RenderManager::framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
