@@ -42,7 +42,7 @@ bool RenderManager::startUp()
     if(addr != nullptr)
     {
         m_renderer = new (addr) RendererGL();
-        if(!m_renderer->startUp())
+        if(!m_renderer->init())
         {
             return false;
         }
@@ -58,7 +58,6 @@ bool RenderManager::startUp()
 
 bool RenderManager::shutDown()
 {
-    delete m_renderer;
     return true;
 }
 

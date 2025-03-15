@@ -9,8 +9,8 @@ class RendererGL : public Renderer
 {
 public:
     RendererGL();
-    bool startUp() override;
-    bool shutDown() override;
+    bool init() override;
+    bool deinit() override;
     void render() override;
     ~RendererGL();
 private:

@@ -8,8 +8,8 @@
 class Renderer
 {
 public:
-    virtual bool startUp() = 0;
-    virtual bool shutDown() = 0; 
+    virtual bool init() = 0;
+    virtual bool deinit() = 0; 
     virtual void render() = 0;
 };
 

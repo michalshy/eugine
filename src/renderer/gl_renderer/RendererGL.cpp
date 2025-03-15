@@ -5,12 +5,12 @@ RendererGL::RendererGL()
 
 }
 
-bool RendererGL::startUp()
+bool RendererGL::init()
 {
     return true;
 }
 
-bool RendererGL::shutDown()
+bool RendererGL::deinit()
 {
     return true;
 }
