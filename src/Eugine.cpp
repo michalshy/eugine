@@ -12,10 +12,9 @@ Eugine::~Eugine()
 
 bool Eugine::boot()
 {
-    if(!m_renderManager.startUp())
-    {
+    if(!m_renderManager.startUp() || 
+        !m_congifManager.startUp())
         return false;
-    }
     return true;
 }
 

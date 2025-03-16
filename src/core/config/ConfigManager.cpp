@@ -2,11 +2,12 @@
 
 ConfigManager::ConfigManager()
 {
-
+    //Do nothing
 }
 
 bool ConfigManager::startUp()
 {
+    parseConfig();
     return true;
 }
 
@@ -22,5 +23,5 @@ bool ConfigManager::shutDown()
 
 ConfigManager::~ConfigManager()
 {
-
+    //Do nothing
 }

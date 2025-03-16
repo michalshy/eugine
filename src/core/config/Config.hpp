@@ -1,9 +1,8 @@
 #ifndef CONFIG_GPP
 #define CONFIG_GPP
 
-#include <string>
 #include <unordered_map>
 
-static std::pair<std::string, std::unordered_map<int, int>> kConfig;
+static std::pair<const char*, std::unordered_map<const char*, char*>> gConfig;
 
 #endif // CONFIG_GPP

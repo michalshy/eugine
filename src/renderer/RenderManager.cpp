@@ -10,6 +10,20 @@ RenderManager::~RenderManager()
     //Do nothing
 }
 
+bool RenderManager::setRenderer()
+{
+    //TODO: provide rendered from configuration
+    void* addr = m_allocator.alloc(sizeof(RendererGL));
+    if(addr != nullptr)
+    {
+        m_renderer = new (addr) RendererGL();
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool RenderManager::startUp()
 {
     glfwInit();
@@ -37,20 +51,7 @@ bool RenderManager::startUp()
     glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 
-    //TODO: provide rendered from configuration
-    void* addr = m_allocator.alloc(sizeof(RendererGL));
-    if(addr != nullptr)
-    {
-        m_renderer = new (addr) RendererGL();
-        if(!m_renderer->init())
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return false;
-    }
+    
 
     return true;
 }

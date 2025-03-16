@@ -2,10 +2,12 @@
 #define IDK_HPP
 
 #include "renderer/RenderManager.hpp"
+#include "core/config/ConfigManager.hpp"
 
 class Eugine
 {
     RenderManager m_renderManager;
+    ConfigManager m_congifManager;
 public:
     Eugine();
 

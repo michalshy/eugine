@@ -1,13 +1,16 @@
 #ifndef CONFIGMANAGER_HPP
 #define CONFIGMANAGER_HPP
 
-class ConfigManager
+#include "../../common/Manager.hpp"
+#include "Config.hpp"
+
+class ConfigManager : public Manager
 {
 public:
     ConfigManager();
-    bool startUp();
+    bool startUp() override;
+    bool shutDown() override;
     void parseConfig();
-    bool shutDown();
     ~ConfigManager();
 private:
 
