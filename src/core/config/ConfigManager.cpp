@@ -19,13 +19,11 @@ void ConfigManager::parseConfig()
 std::string ConfigManager::getEngineOption(std::string section, std::string key)
 {
     std::list<Option>::iterator it;
-    u64 sH = computeHash(section);
-    u64 kH = computeHash(key);
     for(it = m_engineOptions.begin(); it != m_engineOptions.end(); ++it)
     {
-        if(it->section == sH)
+        if(it->section == section)
         {
-            if(it->key == kH)
+            if(it->key == key)
             {
                 return it->value;
             }
@@ -77,12 +75,8 @@ void ConfigManager::parseEngineConfig()
                 }
                 else
                 {
-                    //compute hashes
-                    u64 secHash = computeHash(lastSection);
-                    u64 keyHash = computeHash(line.substr(0, idx));
-                    std::string val = line.substr(idx + 1, line.size() - 1);
                     //process key value pair
-                    m_engineOptions.emplace_back(secHash, keyHash, val);
+                    m_engineOptions.emplace_back(lastSection, line.substr(0, idx), line.substr(idx + 1, line.size() - 1));
                 }
             }
         }

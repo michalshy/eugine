@@ -7,10 +7,10 @@
 #include "../hash/hash.hpp"
 
 struct Option {
-    Option(u64 _section, u64 _key, std::string _value) :
+    Option(std::string _section, std::string _key, std::string _value) :
         section(_section), key(_key), value(_value) {}
-    u64 section;
-    u64 key;
+    std::string section;
+    std::string key;
     std::string value;
 };
 
