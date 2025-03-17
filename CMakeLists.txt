@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.20)
 set(CMAKE_CXX_STANDARD 17)
 project(eugine)
 
+
+
 # Include directiories
 include_directories(${OPENGL_INCLUDE_DIRS}
                     src
@@ -27,6 +29,13 @@ FetchContent_Declare(
 
 find_package(OpenGL REQUIRED)
 
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED ON) 
+set(Boost_USE_STATIC_RUNTIME OFF) 
+find_package(Boost COMPONENTS)
+
+include_directories( $ENV{BOOST_INCLUDEDIR} )
+
 # Search for files
 file(GLOB_RECURSE SRCs
        ${PROJECT_SOURCE_DIR}/src/*.cpp
@@ -41,8 +50,16 @@ set(SOURCE_FILES
 
 add_executable(eugine ${SOURCE_FILES})
 
+# commands
+add_custom_command(
+        TARGET eugine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/config/eugine.cfg
+                ${CMAKE_CURRENT_BINARY_DIR}/config/eugine.cfg)
+
 target_link_libraries(eugine
 	${OPENGL_LIBRARY} 
     glm::glm
     glfw
+    ${Boost_LIBRARIES}
 )

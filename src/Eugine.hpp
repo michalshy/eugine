@@ -7,7 +7,7 @@
 class Eugine
 {
     RenderManager m_renderManager;
-    ConfigManager m_congifManager;
+    ConfigManager m_configManager;
 public:
     Eugine();
 

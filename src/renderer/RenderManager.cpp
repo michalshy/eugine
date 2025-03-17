@@ -10,19 +10,7 @@ RenderManager::~RenderManager()
     //Do nothing
 }
 
-bool RenderManager::setRenderer()
-{
-    //TODO: provide rendered from configuration
-    void* addr = m_allocator.alloc(sizeof(RendererGL));
-    if(addr != nullptr)
-    {
-        m_renderer = new (addr) RendererGL();
-    }
-    else
-    {
-        return false;
-    }
-}
+
 
 bool RenderManager::startUp()
 {
@@ -50,8 +38,11 @@ bool RenderManager::startUp()
 
     glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
-
     
+    if(!setRenderer())
+    {
+        return false;
+    }
 
     return true;
 }
@@ -60,6 +51,11 @@ bool RenderManager::shutDown()
 {
     m_allocator.clear();
     return true;
+}
+
+void RenderManager::setConfig(ConfigManager& configManager)
+{
+    m_configManager = &configManager;
 }
 
 void RenderManager::render()
@@ -76,6 +72,39 @@ void RenderManager::render()
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
+}
+
+bool RenderManager::setRenderer()
+{
+    //TODO: provide rendered from configuration
+    void* addr = m_allocator.alloc(sizeof(RendererGL));
+    if(addr != nullptr)
+    {
+        std::string type = m_configManager->getEngineOption("renderer", "type");
+        if(type == "opengl")
+        {
+            m_renderer = new (addr) RendererGL();
+        }
+        else if(type == "directx")
+        {
+            m_renderer = new (addr) RendererDX();
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    if(!m_renderer->init())
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void RenderManager::processInput(GLFWwindow *window)

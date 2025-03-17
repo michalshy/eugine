@@ -5,6 +5,20 @@ RendererDX::RendererDX()
 
 }
 
+bool RendererDX::init()
+{
+    return false;
+}
+
+bool RendererDX::deinit()
+{
+    return false;
+}
+
+void RendererDX::render()
+{
+}
+
 RendererDX::~RendererDX()
 {
 
