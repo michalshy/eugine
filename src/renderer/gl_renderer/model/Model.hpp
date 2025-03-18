@@ -13,16 +13,17 @@
 class Model
 {
 public:
-    Model(std::string const& path);
+    Model(const char* path);
     void draw(Shader& shader);
     ~Model();
 private:
+    std::vector<Texture> textures_loaded;
     std::vector<Mesh> meshes;
     std::string directory;
     void loadModel(std::string path);
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-    std::vector<Texture> loadMaterialTexture(aiMaterial* mat, aiTextureType type, TexType typeName);
+    std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, TexType typeName);
     u32 textureFromFile(const char* path, const std::string& directory);
 };
 

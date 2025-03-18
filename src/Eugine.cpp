@@ -17,7 +17,6 @@ bool Eugine::boot()
     m_renderManager.setConfig(m_configManager);
     if(!m_renderManager.startUp()) return false;
 
-
     return true;
 }
 

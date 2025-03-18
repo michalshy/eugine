@@ -77,26 +77,32 @@ void RenderManager::render()
 bool RenderManager::setRenderer()
 {
     //TODO: provide rendered from configuration
-    void* addr = m_allocator.alloc(sizeof(RendererGL));
-    if(addr != nullptr)
+    std::string type = m_configManager->getEngineOption("renderer", "type");
+    std::string isDemo = m_configManager->getEngineOption("renderer", "demo");
+    if(type == "opengl")
     {
-        std::string type = m_configManager->getEngineOption("renderer", "type");
-        std::string isDemo = m_configManager->getEngineOption("renderer", "demo");
-        if(type == "opengl")
+        if(isDemo == "y")
         {
-            if(isDemo == "y")
+            void* addr = m_allocator.alloc(sizeof(RendererGLDemo));
+            if(addr != nullptr)
+            {
                 m_renderer = new (addr) RendererGLDemo(*m_configManager, m_window);
-            else
-                m_renderer = new (addr) RendererGL(*m_configManager);
-        }
-        else if(type == "directx")
-        {
-            m_renderer = new (addr) RendererDX();
+            }
         }
         else
         {
-            return false;
+            void* addr = m_allocator.alloc(sizeof(RendererGL));
+            if(addr != nullptr)
+                m_renderer = new (addr) RendererGL(*m_configManager);
         }
+    }
+    else if(type == "directx")
+    {
+        void* addr = m_allocator.alloc(sizeof(RendererDX));
+        if(addr != nullptr)
+            m_renderer = new (addr) RendererDX();
+        else
+            return false;
     }
     else
     {

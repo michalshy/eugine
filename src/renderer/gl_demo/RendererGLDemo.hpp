@@ -18,8 +18,7 @@ class RendererGLDemo : public Renderer
     ConfigManager* m_configManager;
     GLFWwindow* m_window;
     float deltaTime, lastFrame;
-    Shader objSh = Shader("./res/default/shaders/sh.vert", "./res/default/shaders/sh.frag");
-    Shader lghtSh = Shader("./res/default/shaders/shL.vert", "./res/default/shaders/shL.frag");
+    Shader objSh = Shader("./res/default/shaders/shaderModel.vs", "./res/default/shaders/shaderModel.fs");
     Model modelDemo = Model("./res/models/backpack/backpack.obj");
 public:
     RendererGLDemo(ConfigManager& configManager, GLFWwindow* window)

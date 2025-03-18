@@ -1,29 +1,9 @@
 #include "RendererGLDemo.hpp"
 
+
 Camera RendererGLDemo::m_viewport_camera(glm::vec3(1.0f, 2.0f, 6.0f), glm::vec3(0.f, 1.f, 0.f), -90, -20);
 float RendererGLDemo::lastX = 800 / 2.0f;
 float RendererGLDemo::lastY = 800 / 2.0f;
-static glm::vec3 pointLightPositions[] =
-{
-	glm::vec3(0.7f, 0.2f, 2.0f),
-	glm::vec3(2.3f, -3.3f, -4.0f),
-	glm::vec3(-4.f, 2.0f, -12.0f),
-	glm::vec3(0.f, 0.0f, -3.0f)
-};
-
-static constexpr glm::vec3 cubePositions[] =
-{
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f)
-};
 
 bool RendererGLDemo::init()
 {
@@ -67,7 +47,7 @@ void RendererGLDemo::render()
     model = glm::scale(model, glm::vec3(1.f, 1.f, 1.f));
     objSh.setMat4("model", model);
     modelDemo.draw(objSh);
-    
+
     glBindVertexArray(0);
 }
 
