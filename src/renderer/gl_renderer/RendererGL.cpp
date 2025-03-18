@@ -3,8 +3,6 @@
 Camera RendererGL::m_viewport_camera(glm::vec3(1.0f, 2.0f, 6.0f), glm::vec3(0.f, 1.f, 0.f), -90, -20);
 float RendererGL::lastX = 800 / 2.0f;
 float RendererGL::lastY = 800 / 2.0f;
-static Shader objSh("../res/default/shaders/sh.vert", "../res/default/shaders/sh.frag");
-static Shader lghtSh("../res/default/shaders/shL.vert", "../res/default/shaders/shL.frag");
 static glm::vec3 pointLightPositions[] =
 {
 	glm::vec3(0.7f, 0.2f, 2.0f),
@@ -32,7 +30,7 @@ bool RendererGL::init()
     SCREEN_WIDTH = std::stoi(m_configManager->getEngineOption("renderer", "screen_width"));
     SCREEN_HEIGHT = std::stoi(m_configManager->getEngineOption("renderer", "screen_height"));
 
-    if(m_configManager->getEngineOption("engine", "demo") == "y")
+    if(m_configManager->getEngineOption("engine", "technical_demo") == "y")
     {
         m_demo = true;
     }

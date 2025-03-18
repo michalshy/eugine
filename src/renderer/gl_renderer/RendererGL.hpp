@@ -16,6 +16,8 @@ class RendererGL : public Renderer
     ConfigManager* m_configManager;
     GLFWwindow* m_window;
     float deltaTime, lastFrame;
+    Shader objSh = Shader("./res/default/shaders/sh.vert", "./res/default/shaders/sh.frag");
+    Shader lghtSh = Shader("./res/default/shaders/shL.vert", "./res/default/shaders/shL.frag");
 public:
     RendererGL(ConfigManager& configManager, GLFWwindow* window)
     : m_configManager(&configManager), m_window(window) {}
