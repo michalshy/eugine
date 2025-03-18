@@ -83,7 +83,7 @@ bool RenderManager::setRenderer()
         std::string type = m_configManager->getEngineOption("renderer", "type");
         if(type == "opengl")
         {
-            m_renderer = new (addr) RendererGL();
+            m_renderer = new (addr) RendererGL(*m_configManager, m_window);
         }
         else if(type == "directx")
         {
@@ -117,3 +117,4 @@ void RenderManager::framebuffer_size_callback(GLFWwindow *window, int width, int
 {
     glViewport(0, 0, width, height);
 }
+

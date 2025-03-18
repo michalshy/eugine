@@ -57,6 +57,13 @@ add_custom_command(
                 ${CMAKE_SOURCE_DIR}/config/eugine.cfg
                 ${CMAKE_CURRENT_BINARY_DIR}/config/eugine.cfg)
 
+file(COPY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/res)
+add_custom_command(
+    TARGET eugine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_SOURCE_DIR}/res
+            ${CMAKE_CURRENT_BINARY_DIR}/res)
+
 target_link_libraries(eugine
 	${OPENGL_LIBRARY} 
     glm::glm
