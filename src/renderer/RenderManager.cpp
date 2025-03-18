@@ -81,9 +81,13 @@ bool RenderManager::setRenderer()
     if(addr != nullptr)
     {
         std::string type = m_configManager->getEngineOption("renderer", "type");
+        std::string isDemo = m_configManager->getEngineOption("renderer", "demo");
         if(type == "opengl")
         {
-            m_renderer = new (addr) RendererGL(*m_configManager, m_window);
+            if(isDemo == "y")
+                m_renderer = new (addr) RendererGLDemo(*m_configManager, m_window);
+            else
+                m_renderer = new (addr) RendererGL(*m_configManager);
         }
         else if(type == "directx")
         {
