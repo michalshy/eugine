@@ -31,83 +31,6 @@ bool RendererGLDemo::init()
     SCREEN_HEIGHT = std::stoi(m_configManager->getEngineOption("renderer", "screen_height"));
     RendererGLDemo::lastX = SCREEN_WIDTH / 2.0f;
     RendererGLDemo::lastY = SCREEN_HEIGHT / 2.0f;
-    m_demoStruct.tDiffuse = loadTexture("./res/default/textures/container2.png");
-    m_demoStruct.tSpecular = loadTexture("./res/default/textures/container2_specular.png");
-    float vertices[] = {
-        // positions          // normals           // texture coords
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-    
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-    
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-    
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-    
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-    
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
-    };
-
-    glGenBuffers(1, &m_demoStruct.VBO);
-    glGenVertexArrays(1, &m_demoStruct.objectVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_demoStruct.VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindVertexArray(m_demoStruct.objectVAO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    glGenVertexArrays(1, &m_demoStruct.lightVAO);
-    glBindVertexArray(m_demoStruct.lightVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, m_demoStruct.VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-
-    objSh.use();
-    //attach texture
-    objSh.setInt("material.diffuse", 0);
-    objSh.setInt("material.specular", 1);
-    objSh.setInt("material.emission", 2);
-    objSh.setFloat("material.shininess", 32.0f);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -133,101 +56,18 @@ void RendererGLDemo::render()
 
     objSh.use();
 
-    //setting lights
-    objSh.setVec3("viewPos", RendererGLDemo::m_viewport_camera.getPosition());
-    //point
-
-    //directional
-    objSh.setVec3("dirLight.direction", -0.2f, -1.f, -0.3f);
-    objSh.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-    objSh.setVec3("dirLight.diffuse", 0.2f, 0.2f, 0.2f); // darken diffuse light a bit
-    objSh.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
-
-    //spotlight
-    objSh.setVec3("spotLight.position", RendererGLDemo::m_viewport_camera.getPosition());
-    objSh.setVec3("spotLight.direction", RendererGLDemo::m_viewport_camera.getFront());
-    objSh.setVec3("spotLight.ambient", 0.1f, 0.1f, 0.1f);
-    objSh.setVec3("spotLight.diffuse", 0.8f, 0.8f, 0.8f); // darken diffuse light a bit
-    objSh.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
-    objSh.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-    objSh.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(20.f)));
-    objSh.setFloat("spotLight.constant", 1.0f);
-    objSh.setFloat("spotLight.linear", 0.09f);
-    objSh.setFloat("spotLight.quadratic", 0.032f);
-
-    //for point light
-    objSh.setVec3("pointLights[0].position", pointLightPositions[0]);
-    objSh.setVec3("pointLights[0].ambient", 0.1f, 0.1f, 0.1f);
-    objSh.setVec3("pointLights[0].diffuse", 0.4f, 0.4f, 0.4f); // darken diffuse light a bit
-    objSh.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-    objSh.setFloat("pointLights[0].constant", 1.0f);
-    objSh.setFloat("pointLights[0].linear", 0.09f);
-    objSh.setFloat("pointLights[0].quadratic", 0.032f);
-    objSh.setVec3("pointLights[1].position", pointLightPositions[1]);
-    objSh.setVec3("pointLights[1].ambient", 0.1f, 0.1f, 0.1f);
-    objSh.setVec3("pointLights[1].diffuse", 0.4f, 0.4f, 0.4f); // darken diffuse light a bit
-    objSh.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-    objSh.setFloat("pointLights[1].constant", 1.0f);
-    objSh.setFloat("pointLights[1].linear", 0.09f);
-    objSh.setFloat("pointLights[1].quadratic", 0.032f);
-    objSh.setVec3("pointLights[2].position", pointLightPositions[2]);
-    objSh.setVec3("pointLights[2].ambient", 0.1f, 0.1f, 0.1f);
-    objSh.setVec3("pointLights[2].diffuse", 0.4f, 0.4f, 0.4f); // darken diffuse light a bit
-    objSh.setVec3("pointLights[2].specular", 0.8f, 0.8, 0.8);
-    objSh.setFloat("pointLights[2].constant", 1.0f);
-    objSh.setFloat("pointLights[2].linear", 0.09f);
-    objSh.setFloat("pointLights[2].quadratic", 0.032f);
-    objSh.setVec3("pointLights[3].position", pointLightPositions[3]);
-    objSh.setVec3("pointLights[3].ambient", 0.1f, 0.1f, 0.1f);
-    objSh.setVec3("pointLights[3].diffuse", 0.3f, 0.3f, 0.3f); // darken diffuse light a bit
-    objSh.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-    objSh.setFloat("pointLights[3].constant", 1.0f);
-    objSh.setFloat("pointLights[3].linear", 0.09f);
-    objSh.setFloat("pointLights[3].quadratic", 0.032f);
-
-
     //setting up camera
     glm::mat4 projection = glm::perspective(glm::radians(RendererGLDemo::m_viewport_camera.getZoom()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.f);
     glm::mat4 view = RendererGLDemo::m_viewport_camera.getViewMatrix();
     objSh.setMat4("projection", projection);
     objSh.setMat4("view", view);
 
-    //rotation and translation
-    glm::mat4 model = glm::mat4(1.f);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_demoStruct.tDiffuse);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, m_demoStruct.tSpecular);
-
-    for (unsigned int i = 0; i < 10; i++)
-    {
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, cubePositions[i]);
-        float angle = 20.f * i;
-        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.f, 0.3f, 0.5f));
-        objSh.setMat4("model", model);
-        glBindVertexArray(m_demoStruct.objectVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-    }
-
-    //draw light
-    lghtSh.use();
-    lghtSh.setMat4("projection", projection);
-    lghtSh.setMat4("view", view);
-
-    for (int i = 0; i < 4; i++)
-    {
-
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, pointLightPositions[i]);
-        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-        lghtSh.setMat4("model", model);
-        glBindVertexArray(m_demoStruct.lightVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-    }
-
-
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.f, 0.f, 0.f));
+    model = glm::scale(model, glm::vec3(1.f, 1.f, 1.f));
+    objSh.setMat4("model", model);
+    modelDemo.draw(objSh);
+    
     glBindVertexArray(0);
 }
 

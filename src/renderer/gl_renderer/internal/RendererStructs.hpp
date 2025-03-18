@@ -4,6 +4,23 @@
 #include "TypeDef.hpp"
 #include "../shader/Shader.hpp"
 
+enum TexType {
+    DIFFUSE,
+    SPECULAR
+};
+
+struct Texture {
+    u32 id;
+    TexType type;
+    std::string path;
+};
+
+struct Vertex {
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec2 texCoords;
+};
+
 struct GLDemoStruct {
     u32 objectVAO; 
     u32 VBO;

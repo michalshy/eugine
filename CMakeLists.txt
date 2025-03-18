@@ -18,6 +18,7 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(libs/glfw)
+add_subdirectory(libs/assimp)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -57,16 +58,12 @@ add_custom_command(
                 ${CMAKE_SOURCE_DIR}/config/eugine.cfg
                 ${CMAKE_CURRENT_BINARY_DIR}/config/eugine.cfg)
 
-file(COPY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/res)
-add_custom_command(
-    TARGET eugine POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-            ${CMAKE_SOURCE_DIR}/res
-            ${CMAKE_CURRENT_BINARY_DIR}/res)
+file(COPY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(eugine
 	${OPENGL_LIBRARY} 
     glm::glm
     glfw
+    assimp
     ${Boost_LIBRARIES}
 )

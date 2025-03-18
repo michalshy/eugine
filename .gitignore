@@ -1,1 +1,5 @@
 build
+res/textures
+res/shaders
+res/models
+.vscode

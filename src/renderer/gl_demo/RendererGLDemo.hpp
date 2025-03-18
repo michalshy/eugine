@@ -8,6 +8,9 @@
 #include "core/config/ConfigManager.hpp"
 #include "stb_image.h"
 #include <glfw/glfw3.h>
+#include <filesystem>
+#include <string>
+#include "../gl_renderer/model/Model.hpp"
 
 class RendererGLDemo : public Renderer
 {
@@ -17,9 +20,11 @@ class RendererGLDemo : public Renderer
     float deltaTime, lastFrame;
     Shader objSh = Shader("./res/default/shaders/sh.vert", "./res/default/shaders/sh.frag");
     Shader lghtSh = Shader("./res/default/shaders/shL.vert", "./res/default/shaders/shL.frag");
+    Model modelDemo = Model("./res/models/backpack/backpack.obj");
 public:
     RendererGLDemo(ConfigManager& configManager, GLFWwindow* window)
-    : m_configManager(&configManager), m_window(window) {}
+    : m_configManager(&configManager), m_window(window)
+    {}
     bool init() override;
     bool deinit() override;
     void render() override;
@@ -27,8 +32,6 @@ public:
 protected:
     static Camera m_viewport_camera;
     u32 loadTexture(char const* path);
-    void initDefault();
-    void renderDefault();
     bool m_demo;
     GLDemoStruct m_demoStruct;
     void processInput(GLFWwindow* window);
