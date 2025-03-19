@@ -2,7 +2,7 @@
 #define RENDERMANAGER_HPP
 
 #include "common/Renderer.hpp"
-#include "core/config/ConfigManager.hpp"
+#include "../core/config/ConfigManager.hpp"
 #include "gl_renderer/RendererGL.hpp"
 #include "gl_demo/RendererGLDemo.hpp"
 #include "directx_renderer/RendererDX.hpp"

@@ -5,6 +5,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<u32> indices, std::vector<T
     m_vertices = vertices;
     m_indices = indices;
     m_textures = textures;
+    setupMesh();
 }
 
 void Mesh::draw(Shader& shader)
@@ -24,12 +25,15 @@ void Mesh::draw(Shader& shader)
         {
             number = std::to_string(specularNr++);
         }
-        shader.setInt(("material."+type+number).c_str(), i);
+        shader.setInt((type+number).c_str(), i);
+        // and finally bind the texture
+        glBindTexture(GL_TEXTURE_2D, m_textures[i].id);
     }
-    glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+    //set to default
+    glActiveTexture(GL_TEXTURE0);
 }
 
 Mesh::~Mesh()
@@ -55,5 +59,5 @@ void Mesh::setupMesh()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, normal));
     //vertex texcoords
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, texCoords));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, texCoords));
 }

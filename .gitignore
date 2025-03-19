@@ -3,3 +3,4 @@ res/textures
 res/shaders
 res/models
 .vscode
+.cache

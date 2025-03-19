@@ -2,6 +2,7 @@
 #define MESH_HPP
 
 #include "../../internal/RendererStructs.hpp"
+#include "../../shader/Shader.hpp"
 #include "TypeDef.hpp"
 #include <vector>
 

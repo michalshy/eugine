@@ -2,7 +2,8 @@
 #define RENDERERSTRUCTS_HPP
 
 #include "TypeDef.hpp"
-#include "../shader/Shader.hpp"
+#include <string>
+#include <glm/glm.hpp>
 
 enum TexType {
     DIFFUSE,
