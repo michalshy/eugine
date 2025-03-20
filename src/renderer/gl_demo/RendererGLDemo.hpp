@@ -8,8 +8,6 @@
 #include "core/config/ConfigManager.hpp"
 #include "stb_image.h"
 #include <glfw/glfw3.h>
-#include <filesystem>
-#include <string>
 #include "../gl_renderer/model/Model.hpp"
 
 class RendererGLDemo : public Renderer

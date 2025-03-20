@@ -20,6 +20,9 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(libs/glfw)
 add_subdirectory(libs/assimp)
 
+
+
+
 include(FetchContent)
 FetchContent_Declare(
     glm
@@ -29,6 +32,10 @@ FetchContent_Declare(
     FetchContent_MakeAvailable(glm)
 
 find_package(OpenGL REQUIRED)
+FetchContent_Declare(imgui_external
+	URL https://github.com/ocornut/imgui/archive/refs/tags/v1.91.9b.tar.gz
+	EXCLUDE_FROM_ALL
+)
 
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON) 
