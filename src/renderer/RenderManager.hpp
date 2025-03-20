@@ -6,12 +6,13 @@
 #include "gl_renderer/RendererGL.hpp"
 #include "gl_demo/RendererGLDemo.hpp"
 #include "directx_renderer/RendererDX.hpp"
-#include "core/memory/StackAllocator.hpp"
-#include "utils/Manager.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "core/memory/StackAllocator.hpp"
+#include "utils/Manager.hpp"
 #include <GLFW/glfw3.h>
+#include "../gui/GUIManager.hpp"
 
 static const char* kDefaultRenderType = "directx";
 
@@ -22,13 +23,16 @@ enum RenderType {
 
 class RenderManager : public Manager
 {
+    //variables
     u32 m_screenWidth, m_screenHeight;
-    StackAllocator m_allocator;
-    GLFWwindow* m_window;
     RenderType m_rType;
+    //memory
+    StackAllocator m_allocator;
+    //pointers
+    GLFWwindow* m_window;
     Renderer* m_renderer;
-
     ConfigManager* m_configManager;
+    GUIManager* m_guiManager;
 public:
     RenderManager();
     bool startUp() override;
@@ -39,8 +43,9 @@ public:
 
     ~RenderManager();
 protected:
-    bool setRenderer();
-    bool initImgui();
+    bool lowLevelInit();
+    bool imguiInit();
+    bool chooseRenderer();
 };
 
 #endif

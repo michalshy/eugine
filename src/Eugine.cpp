@@ -17,6 +17,8 @@ bool Eugine::boot()
     m_renderManager.setConfig(m_configManager);
     if(!m_renderManager.startUp()) return false;
 
+    if(!m_guiManager.startUp()) return false;
+
     return true;
 }
 
@@ -28,8 +30,10 @@ void Eugine::loop()
 
 void Eugine::shutDown()
 {
+    m_guiManager.shutDown();
     m_renderManager.shutDown();
     m_configManager.shutDown();
+
 }
 
 
