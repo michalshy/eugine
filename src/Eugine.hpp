@@ -13,6 +13,7 @@ public:
 
     bool boot();
     void loop();
+    void shutDown();
 
     ~Eugine();
 };

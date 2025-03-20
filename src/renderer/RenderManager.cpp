@@ -1,4 +1,5 @@
 #include "RenderManager.hpp"
+#include "GLFW/glfw3.h"
 
 RenderManager::RenderManager()
 {
@@ -28,6 +29,7 @@ bool RenderManager::startUp()
         return false;
     }
     glfwMakeContextCurrent(m_window);
+    glfwSwapInterval(1); // Enable vsync
 
     // Setup GLAD
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -36,10 +38,22 @@ bool RenderManager::startUp()
         return false;
     }
 
-    glViewport(0, 0, 800, 600);
-    glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
+    m_screenHeight = std::stoi(m_configManager->getEngineOption("renderer", "screen_height"));
+    m_screenWidth = std::stoi(m_configManager->getEngineOption("renderer", "screen_width"));
+    glViewport(0, 0, m_screenWidth, m_screenHeight);
     
+    //check for renderer
     if(!setRenderer())
+    {
+        return false;
+    }
+    //initialize renderer
+    if(!m_renderer->init())
+    {
+        return false;
+    }
+    //initialize imgui
+    if(!initImgui())
     {
         return false;
     }
@@ -49,6 +63,16 @@ bool RenderManager::startUp()
 
 bool RenderManager::shutDown()
 {
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    // Cleanup glfw
+    glfwDestroyWindow(m_window);
+    glfwTerminate();
+
+    //Clear stack allocator
     m_allocator.clear();
     return true;
 }
@@ -60,43 +84,86 @@ void RenderManager::setConfig(ConfigManager& configManager)
 
 void RenderManager::render()
 {
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     while(!glfwWindowShouldClose(m_window))
     {
-        processInput(m_window);
+        glfwPollEvents();
+        if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) != 0)
+        {
+            ImGui_ImplGlfw_Sleep(10);
+            continue;
+        }
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.f);
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+        // Rendering
+        ImGui::Render();
+        int display_w, display_h;
+        glfwGetFramebufferSize(m_window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.f);
         m_renderer->render();
-    
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        
         glfwSwapBuffers(m_window);
-        glfwPollEvents();
     }
 }
 
 bool RenderManager::setRenderer()
 {
-    //TODO: provide rendered from configuration
+    //Define type
     std::string type = m_configManager->getEngineOption("renderer", "type");
-    std::string isDemo = m_configManager->getEngineOption("renderer", "demo");
     if(type == "opengl")
     {
+        m_rType = RenderType::OPENGL;
+    }
+    else if(type == "directx")
+    {
+        m_rType = RenderType::DIRECTX;
+    }
+    else 
+    {
+        m_rType = RenderType::OPENGL;
+    }
+
+    //check if demo or real renderer is loaded
+    std::string isDemo = m_configManager->getEngineOption("renderer", "demo");
+    
+    if(m_rType == RenderType::OPENGL)
+    {
+        //check if demo should be played
         if(isDemo == "y")
         {
+            //allocate memory for demo renderer
             void* addr = m_allocator.alloc(sizeof(RendererGLDemo));
-            if(addr != nullptr)
+            if(addr != nullptr) //if success
             {
+                //allocate new object at address
+                //IMPORTANT: THIS IS NOT SYSCALL
                 m_renderer = new (addr) RendererGLDemo(*m_configManager, m_window);
+            }
+            else 
+            {
+                return false;
             }
         }
         else
         {
+            //allocate memory for standard OpenGL renderer
             void* addr = m_allocator.alloc(sizeof(RendererGL));
             if(addr != nullptr)
+                //allocate new object at address
+                //IMPORTANT: THIS IS NOT SYSCALL
                 m_renderer = new (addr) RendererGL(*m_configManager);
+            else
+                return false;
         }
     }
-    else if(type == "directx")
+    else if(type == "directx") //check for direct, other instructions are the same
     {
         void* addr = m_allocator.alloc(sizeof(RendererDX));
         if(addr != nullptr)
@@ -109,22 +176,43 @@ bool RenderManager::setRenderer()
         return false;
     }
 
-    if(!m_renderer->init())
-    {
-        return false;
-    }
-
     return true;
 }
 
-void RenderManager::processInput(GLFWwindow *window)
+bool RenderManager::initImgui()
 {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-void RenderManager::framebuffer_size_callback(GLFWwindow *window, int width, int height)
-{
-    glViewport(0, 0, width, height);
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsLight();
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
+    // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+    // - Read 'docs/FONTS.md' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    // - Our Emscripten build process allows embedding fonts to be accessible at runtime from the "fonts/" folder. See Makefile.emscripten for details.
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != nullptr);
+
+    return true;
 }
 

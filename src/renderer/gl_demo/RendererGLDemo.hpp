@@ -9,6 +9,9 @@
 #include "stb_image.h"
 #include <glfw/glfw3.h>
 #include "../gl_renderer/model/Model.hpp"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 class RendererGLDemo : public Renderer
 {
@@ -28,9 +31,9 @@ public:
     ~RendererGLDemo();
 protected:
     static Camera m_viewport_camera;
-    u32 loadTexture(char const* path);
     bool m_demo;
     GLDemoStruct m_demoStruct;
+
     void processInput(GLFWwindow* window);
     static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn);
     static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);

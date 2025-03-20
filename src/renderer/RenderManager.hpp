@@ -8,14 +8,21 @@
 #include "directx_renderer/RendererDX.hpp"
 #include "core/memory/StackAllocator.hpp"
 #include "utils/Manager.hpp"
-#include <GLFW/glfw3.h>
+#include <glfw/glfw3.h>
 
 static const char* kDefaultRenderType = "directx";
 
+enum RenderType {
+    OPENGL,
+    DIRECTX,
+};
+
 class RenderManager : public Manager
 {
+    u32 m_screenWidth, m_screenHeight;
     StackAllocator m_allocator;
     GLFWwindow* m_window;
+    RenderType m_rType;
     Renderer* m_renderer;
 
     ConfigManager* m_configManager;
@@ -30,8 +37,7 @@ public:
     ~RenderManager();
 protected:
     bool setRenderer();
-    static void processInput(GLFWwindow* window);
-    static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+    bool initImgui();
 };
 
 #endif

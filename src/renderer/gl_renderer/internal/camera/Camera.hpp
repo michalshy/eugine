@@ -1,8 +1,7 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include "TypeDef.hpp"
-#include <glad/glad.h>
+#include "GLFW/glfw3.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -106,20 +105,23 @@ public:
         if(direction == RIGHT)
             Postion += Right * velocity;
     }
-    void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
+    void processMouseMovement(float xoffset, float yoffset, GLFWwindow* window, GLboolean constrainPitch = true)
     {
-        xoffset *= MouseSensitivity;
-        yoffset *= MouseSensitivity;
-        Yaw += xoffset;
-        Pitch += yoffset;
-        if(constrainPitch)
+        if(glfwGetKey(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
         {
-            if(Pitch > 89.0f)
-                Pitch = 89.0f;
-            if(Pitch < -89.0f)
-                Pitch = -89.0f;
+            xoffset *= MouseSensitivity;
+            yoffset *= MouseSensitivity;
+            Yaw += xoffset;
+            Pitch += yoffset;
+            if(constrainPitch)
+            {
+                if(Pitch > 89.0f)
+                    Pitch = 89.0f;
+                if(Pitch < -89.0f)
+                    Pitch = -89.0f;
+            }
+            updateCameraVectors();
         }
-        updateCameraVectors();
     }
     void processMouseScroll(float yoffset)
     {

@@ -23,6 +23,13 @@ bool Eugine::boot()
 void Eugine::loop()
 {
     m_renderManager.render();
+    shutDown();
+}
+
+void Eugine::shutDown()
+{
+    m_renderManager.shutDown();
+    m_configManager.shutDown();
 }
 
 

@@ -11,7 +11,9 @@ include_directories(${OPENGL_INCLUDE_DIRS}
                     src
                     third_party/include/image
                     third_party/include/KHR
-                    third_party/include)
+                    third_party/include
+                    libs/imgui
+                    libs/imgui/backends)
 
 # Include libraries
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -19,9 +21,6 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(libs/glfw)
 add_subdirectory(libs/assimp)
-
-
-
 
 include(FetchContent)
 FetchContent_Declare(
@@ -44,6 +43,15 @@ find_package(Boost COMPONENTS)
 
 include_directories( $ENV{BOOST_INCLUDEDIR} )
 
+set(IMGUI_FILES 
+    libs/imgui/imgui.cpp
+    libs/imgui/imgui_widgets.cpp
+    libs/imgui/imgui_tables.cpp
+    libs/imgui/imgui_draw.cpp
+    libs/imgui/imgui_demo.cpp
+    libs/imgui/backends/imgui_impl_opengl3.cpp
+    libs/imgui/backends/imgui_impl_glfw.cpp)
+
 # Search for files
 file(GLOB_RECURSE SRCs
        ${PROJECT_SOURCE_DIR}/src/*.cpp
@@ -54,7 +62,8 @@ file(GLOB_RECURSE SRCs
 
 set(SOURCE_FILES 
     src/main.cpp
-    ${SRCs})
+    ${SRCs}
+    ${IMGUI_FILES})
 
 add_executable(eugine ${SOURCE_FILES})
 

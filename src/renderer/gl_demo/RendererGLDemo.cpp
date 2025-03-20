@@ -16,8 +16,7 @@ bool RendererGLDemo::init()
 
     glfwSetCursorPosCallback(m_window, mouseCallback);
     glfwSetScrollCallback(m_window, scrollCallback);
-
-    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    
     return true;
 }
 
@@ -89,7 +88,7 @@ void RendererGLDemo::mouseCallback(GLFWwindow* window, double xposIn, double ypo
 	lastX = xpos;
 	lastY = ypos;
 
-	m_viewport_camera.processMouseMovement(xoffset, yoffset);
+	m_viewport_camera.processMouseMovement(xoffset, yoffset, window);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
