@@ -8,7 +8,10 @@
 #include "directx_renderer/RendererDX.hpp"
 #include "core/memory/StackAllocator.hpp"
 #include "utils/Manager.hpp"
-#include <glfw/glfw3.h>
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include <GLFW/glfw3.h>
 
 static const char* kDefaultRenderType = "directx";
 
