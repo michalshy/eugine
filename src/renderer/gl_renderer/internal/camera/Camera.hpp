@@ -107,21 +107,18 @@ public:
     }
     void processMouseMovement(float xoffset, float yoffset, GLFWwindow* window, GLboolean constrainPitch = true)
     {
-        if(glfwGetKey(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
+        xoffset *= MouseSensitivity;
+        yoffset *= MouseSensitivity;
+        Yaw += xoffset;
+        Pitch += yoffset;
+        if(constrainPitch)
         {
-            xoffset *= MouseSensitivity;
-            yoffset *= MouseSensitivity;
-            Yaw += xoffset;
-            Pitch += yoffset;
-            if(constrainPitch)
-            {
-                if(Pitch > 89.0f)
-                    Pitch = 89.0f;
-                if(Pitch < -89.0f)
-                    Pitch = -89.0f;
-            }
-            updateCameraVectors();
+            if(Pitch > 89.0f)
+                Pitch = 89.0f;
+            if(Pitch < -89.0f)
+                Pitch = -89.0f;
         }
+        updateCameraVectors();
     }
     void processMouseScroll(float yoffset)
     {

@@ -18,7 +18,7 @@ public:
     bool shutDown() override;
     void createGUI();
 protected:
-
+    void showMenuFile();
 };
 
 #endif

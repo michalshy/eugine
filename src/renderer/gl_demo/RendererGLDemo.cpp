@@ -1,4 +1,6 @@
 #include "RendererGLDemo.hpp"
+#include "GLFW/glfw3.h"
+#include "imgui.h"
 
 
 Camera RendererGLDemo::m_viewport_camera(glm::vec3(1.0f, 2.0f, 6.0f), glm::vec3(0.f, 1.f, 0.f), -90, -20);
@@ -54,8 +56,6 @@ RendererGLDemo::~RendererGLDemo()
 
 void RendererGLDemo::processInput(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         RendererGLDemo::m_viewport_camera.processKeyboard(FORWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -87,8 +87,8 @@ void RendererGLDemo::mouseCallback(GLFWwindow* window, double xposIn, double ypo
 
 	lastX = xpos;
 	lastY = ypos;
-
-	m_viewport_camera.processMouseMovement(xoffset, yoffset, window);
+    if(ImGui::IsMouseDown(ImGuiMouseButton_Right))
+	    m_viewport_camera.processMouseMovement(xoffset, yoffset, window);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
