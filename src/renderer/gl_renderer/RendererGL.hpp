@@ -2,9 +2,8 @@
 #define RENDERERGL_HPP
 
 #include "../common/Renderer.hpp"
-#include "shader/Shader.hpp"
-#include "internal/camera/Camera.hpp"
-#include "internal/RendererStructs.hpp"
+#include "camera/Camera.hpp"
+#include "../common/RendererStructs.hpp"
 #include "core/config/ConfigManager.hpp"
 #include "stb_image.h"
 #include <glfw/glfw3.h>

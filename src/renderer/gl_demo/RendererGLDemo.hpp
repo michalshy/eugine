@@ -2,14 +2,11 @@
 #define RENDERERGLDEMO_HPP
 
 #include "../common/Renderer.hpp"
-#include "../gl_renderer/shader/Shader.hpp"
-#include "../gl_renderer/internal/camera/Camera.hpp"
-#include "../gl_renderer/internal/RendererStructs.hpp"
+#include "../gl_renderer/model/Model.hpp"
+#include "../gl_renderer/camera/Camera.hpp"
+#include "../common/RendererStructs.hpp"
 #include "core/config/ConfigManager.hpp"
 #include "stb_image.h"
-#include <GLFW/glfw3.h>
-#include "../gl_renderer/model/Model.hpp"
-
 
 class RendererGLDemo : public Renderer
 {

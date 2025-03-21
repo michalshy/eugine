@@ -8,6 +8,8 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<u32> indices, std::vector<T
     setupMesh();
 }
 
+Mesh::~Mesh(){ /* Do nothing */ }
+
 void Mesh::draw(Shader& shader)
 {
     u32 diffuseNr = 1;
@@ -34,11 +36,6 @@ void Mesh::draw(Shader& shader)
     glBindVertexArray(0);
     //set to default
     glActiveTexture(GL_TEXTURE0);
-}
-
-Mesh::~Mesh()
-{
-    //Do nothing
 }
 
 void Mesh::setupMesh()

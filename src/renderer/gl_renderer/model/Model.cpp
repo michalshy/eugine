@@ -5,17 +5,14 @@ Model::Model(const char* path)
     loadModel(path);
 }
 
+Model::~Model(){ /* Do nothing */ }
+
 void Model::draw(Shader& shader)
 {
     for(u32 i = 0; i < meshes.size(); i++)
     {
         meshes[i].draw(shader);
     }
-}
-
-Model::~Model()
-{
-
 }
 
 void Model::loadModel(std::string path)

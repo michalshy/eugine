@@ -3,23 +3,18 @@
 
 #include "common/Renderer.hpp"
 #include "../core/config/ConfigManager.hpp"
-#include "gl_renderer/RendererGL.hpp"
 #include "gl_demo/RendererGLDemo.hpp"
+#include "gl_renderer/RendererGL.hpp"
 #include "directx_renderer/RendererDX.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "core/memory/StackAllocator.hpp"
+#include "core/alloc/StackAllocator.hpp"
 #include "utils/Manager.hpp"
 #include <GLFW/glfw3.h>
 #include "../gui/GUIManager.hpp"
 
 static const char* kDefaultRenderType = "directx";
-
-enum RenderType {
-    OPENGL,
-    DIRECTX,
-};
 
 class RenderManager : public Manager
 {

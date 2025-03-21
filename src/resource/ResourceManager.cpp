@@ -1,11 +1,14 @@
 #include "ResourceManager.hpp"
 
-ResourceManager::ResourceManager()
-{
+ResourceManager::ResourceManager(){ /* Do nothing! */ }
+ResourceManager::~ResourceManager(){ /* Do nothing! */ }
 
+bool ResourceManager::startUp()
+{
+    return true;
 }
 
-ResourceManager::~ResourceManager()
+bool ResourceManager::shutDown()
 {
-
+    return true;
 }

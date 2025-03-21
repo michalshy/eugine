@@ -70,6 +70,8 @@ void RenderManager::render()
             ImGui_ImplGlfw_Sleep(10);
             continue;
         }
+
+        
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -89,6 +91,15 @@ void RenderManager::render()
         m_renderer->render();
         
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        // Update and Render additional Platform Windows
+        if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
         
         glfwSwapBuffers(m_window);
     }
@@ -130,14 +141,15 @@ bool RenderManager::imguiInit()
 {
     if(m_rType == RenderType::OPENGL)
     {
-        // Enable docking
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        // Enable docking
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
@@ -229,4 +241,3 @@ bool RenderManager::chooseRenderer()
 
     return true;
 }
-

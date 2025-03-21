@@ -1,7 +1,7 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
-#include "../../internal/RendererStructs.hpp"
+#include "../../../common/RendererStructs.hpp"
 #include "../../shader/Shader.hpp"
 #include "TypeDef.hpp"
 #include <vector>
@@ -15,8 +15,8 @@ public:
     Mesh(std::vector<Vertex> vertices, 
         std::vector<u32> indices, 
         std::vector<Texture> textures);
-    void draw(Shader& shader);
     ~Mesh();
+    void draw(Shader& shader);
 private:
     u32 VAO, VBO, EBO;
     void setupMesh();
