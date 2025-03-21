@@ -15,25 +15,13 @@ RenderManager::~RenderManager()
 bool RenderManager::startUp()
 {
     //initialize glad, opengl, glfw
-    if(!lowLevelInit())
-    {
-        return false;
-    }
+    if(!lowLevelInit()) return false;
     //check for renderer
-    if(!chooseRenderer())
-    {
-        return false;
-    }
+    if(!chooseRenderer()) return false;
     //initialize renderer
-    if(!m_renderer->init())
-    {
-        return false;
-    }
+    if(!m_renderer->init()) return false;
     //initialize imgui
-    if(!imguiInit())
-    {
-        return false;
-    }
+    if(!imguiInit()) return false;
 
     return true;
 }
@@ -44,11 +32,9 @@ bool RenderManager::shutDown()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-
     // Cleanup glfw
     glfwDestroyWindow(m_window);
     glfwTerminate();
-
     //Clear stack allocator
     m_allocator.clear();
     return true;
@@ -70,28 +56,19 @@ void RenderManager::render()
             ImGui_ImplGlfw_Sleep(10);
             continue;
         }
-
-        
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        
         m_guiManager->createGUI();
-
         // Rendering
+        m_renderer->render();
         ImGui::Render();
-
         int display_w, display_h;
         glfwGetFramebufferSize(m_window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        
         glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        m_renderer->render();
-        
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
         // Update and Render additional Platform Windows
         if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
@@ -100,7 +77,6 @@ void RenderManager::render()
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(backup_current_context);
         }
-        
         glfwSwapBuffers(m_window);
     }
 }
@@ -111,7 +87,6 @@ bool RenderManager::lowLevelInit()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
     // Create window
     m_window = glfwCreateWindow(800, 600, "EUGINE", NULL, NULL);
     if (m_window == NULL)
@@ -122,18 +97,15 @@ bool RenderManager::lowLevelInit()
     }
     glfwMakeContextCurrent(m_window);
     glfwSwapInterval(1); // Enable vsync
-
     // Setup GLAD
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to init GLAD" << std::endl;
         return false;
     }
-
     m_screenHeight = std::stoi(m_configManager->getEngineOption("renderer", "screen_height"));
     m_screenWidth = std::stoi(m_configManager->getEngineOption("renderer", "screen_width"));
     glViewport(0, 0, m_screenWidth, m_screenHeight);
-
     return true;
 }
 
@@ -150,15 +122,12 @@ bool RenderManager::imguiInit()
         // Enable docking
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-    
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
         //ImGui::StyleColorsLight();
-    
         // Setup Platform/Renderer backends
         ImGui_ImplGlfw_InitForOpenGL(m_window, true);
         ImGui_ImplOpenGL3_Init("#version 330");
-    
         // Load Fonts
         // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
         // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
@@ -175,7 +144,6 @@ bool RenderManager::imguiInit()
         //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
         //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
         //IM_ASSERT(font != nullptr);
-
         return true;
     }
 

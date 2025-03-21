@@ -11,10 +11,16 @@
 class RendererGLDemo : public Renderer
 {
     u32 SCREEN_WIDTH, SCREEN_HEIGHT;
+    u32 framebuffer;
+    u32 textureColorbuffer;
+    u32 rbo;
+    u32 quadVAO, quadVBO;
+
     ConfigManager* m_configManager;
     GLFWwindow* m_window;
     float deltaTime, lastFrame;
     Shader objSh = Shader("./res/default/shaders/shaderModel.vs", "./res/default/shaders/shaderModel.fs");
+    Shader screenShader = Shader("./res/default/shaders/screen.vs", "./res/default/shaders/screen.fs");
     Model modelDemo = Model("./res/models/backpack/backpack.obj");
 public:
     RendererGLDemo(ConfigManager& configManager, GLFWwindow* window)

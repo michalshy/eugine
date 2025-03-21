@@ -93,25 +93,24 @@ static void ShowExampleMenuFile()
 void GUIManager::createGUI() {
     IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing ImGui context. Refer to source code and library examples!");
     IMGUI_CHECKVERSION();
-    ImGui::ShowDemoWindow();
-    // if (ImGui::BeginMainMenuBar())
-    // {
-    //     if (ImGui::BeginMenu("File"))
-    //     {
-    //         ShowExampleMenuFile();
-    //         ImGui::EndMenu();
-    //     }
-    //     if (ImGui::BeginMenu("Edit"))
-    //     {
-    //         if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-    //         if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {} // Disabled item
-    //         ImGui::Separator();
-    //         if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-    //         if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-    //         if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-    //         ImGui::EndMenu();
-    //     }
-    //     ImGui::EndMainMenuBar();
-    // }
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            ShowExampleMenuFile();
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Edit"))
+        {
+            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {} // Disabled item
+            ImGui::Separator();
+            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
 }
 
