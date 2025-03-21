@@ -93,7 +93,7 @@ static void ShowExampleMenuFile()
 void GUIManager::createGUI() {
     IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing ImGui context. Refer to source code and library examples!");
     IMGUI_CHECKVERSION();
-
+    ImGui::ShowDemoWindow();
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))

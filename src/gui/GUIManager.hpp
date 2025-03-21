@@ -16,6 +16,7 @@ public:
     // Interface
     bool startUp() override;
     bool shutDown() override;
+    // Methods
     void createGUI();
 protected:
     void showMenuFile();

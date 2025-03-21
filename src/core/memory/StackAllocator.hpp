@@ -2,6 +2,7 @@
 #define STACKALLOCATOR_HPP
 
 #include "TypeDef.hpp"
+#include "utils/Memory.hpp"
 
 constexpr u32 kSTACK_ALLOCATOR_SIZE = 1024 * 1024;
 
