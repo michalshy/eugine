@@ -10,5 +10,4 @@ using i16 = short;
 using i32 = int;
 using i64 = long long;
 
-
 #endif // TYPEDEF_HPP

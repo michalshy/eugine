@@ -1,5 +1,6 @@
 #include "RenderManager.hpp"
 #include "GLFW/glfw3.h"
+#include "gl_renderer/FrameBuffer.hpp"
 #include "imgui.h"
 
 RenderManager::RenderManager()
@@ -22,7 +23,6 @@ bool RenderManager::startUp()
     if(!m_renderer->init()) return false;
     //initialize imgui
     if(!imguiInit()) return false;
-
     return true;
 }
 
@@ -59,9 +59,9 @@ void RenderManager::render()
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        m_guiManager->createGUI();
-        // Rendering
         m_renderer->render();
+        m_guiManager->createGUI();
+        //Rendering
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(m_window, &display_w, &display_h);
@@ -106,6 +106,7 @@ bool RenderManager::lowLevelInit()
     m_screenHeight = std::stoi(m_configManager->getEngineOption("renderer", "screen_height"));
     m_screenWidth = std::stoi(m_configManager->getEngineOption("renderer", "screen_width"));
     glViewport(0, 0, m_screenWidth, m_screenHeight);
+
     return true;
 }
 

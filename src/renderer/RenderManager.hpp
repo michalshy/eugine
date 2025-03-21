@@ -13,8 +13,7 @@
 #include "utils/Manager.hpp"
 #include <GLFW/glfw3.h>
 #include "../gui/GUIManager.hpp"
-
-static const char* kDefaultRenderType = "directx";
+#include "gl_renderer/FrameBuffer.hpp"
 
 class RenderManager : public Manager
 {

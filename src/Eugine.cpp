@@ -22,7 +22,7 @@ bool Eugine::boot()
     return true;
 }
 
-void Eugine::loop()
+void Eugine::engine()
 {
     m_renderManager.render();
     shutDown();
