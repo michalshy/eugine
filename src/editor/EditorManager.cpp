@@ -22,11 +22,16 @@ bool EditorManager::shutDown()
 void EditorManager::contructEditor()
 {
     m_guiManager->preRender();
-
+    
+    //Create dockspace and dock windows
     constructGlobalWindow();
+    //Create menu bar
     constructMenuBar();
     constructViewport();
     constructSceneHierarchy();
+    constructInspector();
+    constructAssetBrowser();
+
 
     m_guiManager->postRender();
 }
@@ -49,4 +54,14 @@ void EditorManager::constructViewport()
 void EditorManager::constructSceneHierarchy()
 {
     m_guiManager->showSceneHierarchy(m_editorStates.sceneHierarchyState);
+}
+
+void EditorManager::constructInspector()
+{
+    m_guiManager->showInspector(m_editorStates.inspectorState);
+}
+
+void EditorManager::constructAssetBrowser()
+{
+    m_guiManager->showAssetBrowser(m_editorStates.assetBrowserState);
 }

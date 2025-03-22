@@ -10,6 +10,8 @@ struct EditorStates
     bool menuBarState = true;
     bool viewPortState = true;
     bool sceneHierarchyState = true;
+    bool inspectorState = true;
+    bool assetBrowserState = true;
 };
 
 class EditorManager
@@ -28,6 +30,8 @@ private:
     void constructMenuBar();
     void constructViewport();
     void constructSceneHierarchy();
+    void constructInspector();
+    void constructAssetBrowser();
 };
 
 #endif

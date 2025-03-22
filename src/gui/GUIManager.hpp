@@ -9,7 +9,7 @@ class GUIManager
     GLFWwindow* m_window;
     ConfigManager* m_configManager;
     RenderManager* m_renderManager;
-    bool m_state = true;
+    bool m_firstTime = true;
 public:
     // Constructor / Destructor
     GUIManager();
@@ -25,6 +25,8 @@ public:
     void showMenuBar(bool);
     void showViewport(bool);
     void showSceneHierarchy(bool);
+    void showInspector(bool);
+    void showAssetBrowser(bool);
 protected:
     bool imguiInit();
 };

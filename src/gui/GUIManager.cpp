@@ -1,5 +1,6 @@
 #include "GUIManager.hpp"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "renderer/RenderManager.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -59,80 +60,65 @@ void GUIManager::postRender()
 }
 
 void GUIManager::showGlobalWindow(bool state) {
-    // Variables to configure the Dockspace example.
-    static bool opt_fullscreen = true; // Is the Dockspace full-screen?
-    static bool opt_padding = false; // Is there padding (a blank space) between the window edge and the Dockspace?
-    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None; // Config flags for the Dockspace
 
-    // In this example, we're embedding the Dockspace into an invisible parent window to make it more configurable.
-    // We set ImGuiWindowFlags_NoDocking to make sure the parent isn't dockable into because this is handled by the Dockspace.
-    //
-    // ImGuiWindowFlags_MenuBar is to show a menu bar with config options. This isn't necessary to the functionality of a
-    // Dockspace, but it is here to provide a way to change the configuration flags interactively.
-    // You can remove the MenuBar flag if you don't want it in your app, but also remember to remove the code which actually
-    // renders the menu bar, found at the end of this function.
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-
-    // Is the example in Fullscreen mode?
-    if (opt_fullscreen)
-    {
-        // If so, get the main viewport:
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-
-        // Set the parent window's position, size, and viewport to match that of the main viewport. This is so the parent window
-        // completely covers the main viewport, giving it a "full-screen" feel.
-        ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(viewport->WorkSize);
-        ImGui::SetNextWindowViewport(viewport->ID);
-
-        // Set the parent window's styles to match that of the main viewport:
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f); // No corner rounding on the window
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f); // No border around the window
-
-        // Manipulate the window flags to make it inaccessible to the user (no titlebar, resize/move, or navigation)
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    const float WINDOW_AND_STATUS_BAR_HEIGHT = ImGui::GetFrameHeight() * 2.0f;
+    const auto &viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(
+        ImVec2(viewport->Pos.x, viewport->Pos.y + ImGui::GetFrameHeight()));
+    ImGui::SetNextWindowSize(ImVec2(
+        // Extract status bar from viewport size
+        viewport->Size.x, viewport->Size.y - WINDOW_AND_STATUS_BAR_HEIGHT));
+    ImGui::SetNextWindowViewport(viewport->ID);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+  
+    ImGuiWindowFlags flags =
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs |
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse |
+        ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBackground |
+        ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking;
+  
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("EugineDockspace", nullptr, flags);
+    ImGui::PopStyleVar();
+    ImGui::PopStyleVar(2);
+  
+    auto dockspaceId = ImGui::GetID("EugineDockspace");
+    ImGui::DockSpace(dockspaceId, ImVec2{0.0f, 0.0f},
+                     ImGuiDockNodeFlags_PassthruCentralNode);
+  
+    if (m_firstTime) {
+      ImGui::DockBuilderRemoveNode(dockspaceId);
+      ImGui::DockBuilderAddNode(dockspaceId,
+                                ImGuiDockNodeFlags_DockSpace |
+                                    ImGuiDockNodeFlags_PassthruCentralNode);
+      ImGui::DockBuilderSetNodeSize(dockspaceId, viewport->Size);
+  
+      constexpr float RATIO_1_5 = 0.8f;
+      constexpr float RATIO_5_1 = 0.2f;
+      constexpr float RATIO_1_4 = 0.25;
+  
+      ImGuiID topAreaId = -1;
+      auto browserId = ImGui::DockBuilderSplitNode(
+          dockspaceId, ImGuiDir_Down, RATIO_1_4, nullptr, &topAreaId);
+  
+      ImGuiID topRightAreaId = -1;
+      auto hierarchyId = ImGui::DockBuilderSplitNode(
+          topAreaId, ImGuiDir_Left, RATIO_5_1, nullptr, &topRightAreaId);
+  
+      ImGuiID inspectorId = -1;
+      auto viewId = ImGui::DockBuilderSplitNode(topRightAreaId, ImGuiDir_Left,
+                                                RATIO_1_5, nullptr, &inspectorId);
+  
+      ImGui::DockBuilderDockWindow("Hierarchy", hierarchyId);
+      ImGui::DockBuilderDockWindow("Inspector", inspectorId);
+      ImGui::DockBuilderDockWindow("Viewport", viewId);
+      ImGui::DockBuilderDockWindow("Asset Browser", browserId);
+  
+      ImGui::DockBuilderFinish(dockspaceId);
+      m_firstTime = false;
     }
-    else
-    {
-        // The example is not in Fullscreen mode (the parent window can be dragged around and resized), disable the
-        // ImGuiDockNodeFlags_PassthruCentralNode flag.
-        dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
-    }
-
-    // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-    // and handle the pass-thru hole, so the parent window should not have its own background:
-    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-        window_flags |= ImGuiWindowFlags_NoBackground;
-
-    // If the padding option is disabled, set the parent window's padding size to 0 to effectively hide said padding.
-    if (!opt_padding)
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-
-    // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-    // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-    // all active windows docked into it will lose their parent and become undocked.
-    // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-    // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
-    ImGui::Begin("DockSpace Demo", 0, window_flags);
-
-    // Remove the padding configuration - we pushed it, now we pop it:
-    if (!opt_padding)
-        ImGui::PopStyleVar();
-
-    // Pop the two style rules set in Fullscreen mode - the corner rounding and the border size.
-    if (opt_fullscreen)
-        ImGui::PopStyleVar(2);
-
-    // Check if Docking is enabled:
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-    {
-        // If it is, draw the Dockspace with the DockSpace() function.
-        // The GetID() function is to give a unique identifier to the Dockspace - here, it's "MyDockSpace".
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-    }
+  
     ImGui::End();
 }
 
@@ -166,9 +152,25 @@ void GUIManager::showViewport(bool state) {
 }
 
 void GUIManager::showSceneHierarchy(bool state) {
-    if (ImGui::Begin("Scene Hierarchy", &state, 0))
+    if (ImGui::Begin("Hierarchy", &state, 0))
     {
-        ImGui::Text("Scene Hierarchy");
+        ImGui::Text("Hierarchy");
+    }
+    ImGui::End();
+}
+
+void GUIManager::showInspector(bool state) {
+    if (ImGui::Begin("Inspector", &state, 0))
+    {
+        ImGui::Text("Inspector");
+    }
+    ImGui::End();
+}
+
+void GUIManager::showAssetBrowser(bool state) {
+    if (ImGui::Begin("Asset Browser", &state, 0))
+    {
+        ImGui::Text("Asset Browser");
     }
     ImGui::End();
 }
