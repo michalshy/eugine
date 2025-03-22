@@ -27,8 +27,8 @@ void Eugine::engine()
 {
     while(m_renderManager.windowState())
     {
-        m_editorManager.contructEditor();
         m_renderManager.render();
+        m_editorManager.contructEditor();
     }
     shutDown();
 }

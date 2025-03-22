@@ -1,7 +1,6 @@
 #ifndef GUIMANAGER_HPP
 #define GUIMANAGER_HPP
 
-#include "imgui_impl_glfw.h"
 #include "renderer/RenderManager.hpp"
 #include "core/config/ConfigManager.hpp"
 
@@ -22,6 +21,7 @@ public:
     void preRender();
     void postRender();
 
+    void showMenuBar(bool);
     void showViewport(bool);
 protected:
     bool imguiInit();

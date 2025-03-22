@@ -53,6 +53,13 @@ void RendererGLDemo::render()
     m_objSh.setMat4("model", model);
     m_modelDemo.draw(m_objSh);
 
+    // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+    // clear all relevant buffers
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+    glClear(GL_COLOR_BUFFER_BIT);
+
     m_screenShader.use();
     m_frameBuffer.drawToTexture();
 }

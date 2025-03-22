@@ -31,10 +31,7 @@ bool RenderManager::startUp(ConfigManager& configManager)
 
 bool RenderManager::shutDown()
 {
-    // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    
     // Cleanup glfw
     glfwDestroyWindow(m_window);
     glfwTerminate();
@@ -61,6 +58,11 @@ bool RenderManager::windowState()
 RenderType RenderManager::getRenderType()
 {
     return m_rType;
+}
+
+GLFWwindow* RenderManager::getWindow()
+{
+    return m_window;
 }
 
 bool RenderManager::lowLevelInit()

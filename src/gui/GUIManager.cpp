@@ -8,6 +8,7 @@ GUIManager::~GUIManager() { /*Do nothing*/ }
 bool  GUIManager::startUp(ConfigManager& configManager, RenderManager& renderManager) {
     m_configManager = &configManager;
     m_renderManager = &renderManager;
+    m_window = m_renderManager->getWindow();
 
     if(!imguiInit()) return false;
 
@@ -15,6 +16,11 @@ bool  GUIManager::startUp(ConfigManager& configManager, RenderManager& renderMan
 }
 
 bool GUIManager::shutDown() {
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     return true;
 }
 
@@ -35,7 +41,6 @@ void GUIManager::postRender()
 {
     ImGui::Render();
     int display_w, display_h;
-    
     glfwGetFramebufferSize(m_window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
@@ -50,6 +55,22 @@ void GUIManager::postRender()
         glfwMakeContextCurrent(backup_current_context);
     }
     glfwSwapBuffers(m_window);
+}
+
+void GUIManager::showMenuBar(bool state) {
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("New", "Ctrl+N")) {}
+            if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+            if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+            if (ImGui::MenuItem("Save As..")) {}
+            if (ImGui::MenuItem("Exit")) {}
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
 }
 
 void GUIManager::showViewport(bool state) {

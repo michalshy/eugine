@@ -38,7 +38,7 @@ void EditorManager::constructGlobalWindow()
 
 void EditorManager::constructMenuBar()
 {
-
+    m_guiManager->showMenuBar(m_editorStates.menuBarState);
 }
 
 void EditorManager::constructViewport()

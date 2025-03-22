@@ -6,6 +6,7 @@
 
 struct EditorStates
 {
+    bool menuBarState = true;
     bool viewPortState = true;
 };
 

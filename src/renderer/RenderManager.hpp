@@ -32,6 +32,7 @@ public:
     FrameBuffer* getFrameBuffer();
     bool windowState();
     RenderType getRenderType();
+    GLFWwindow* getWindow();
 
     ~RenderManager();
 protected:
