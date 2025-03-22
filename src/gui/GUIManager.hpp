@@ -21,8 +21,10 @@ public:
     void preRender();
     void postRender();
 
+    void showGlobalWindow(bool);
     void showMenuBar(bool);
     void showViewport(bool);
+    void showSceneHierarchy(bool);
 protected:
     bool imguiInit();
 };

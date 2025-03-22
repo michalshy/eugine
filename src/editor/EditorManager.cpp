@@ -33,7 +33,7 @@ void EditorManager::contructEditor()
 
 void EditorManager::constructGlobalWindow()
 {
-    
+    m_guiManager->showGlobalWindow(m_editorStates.globalWindowState);
 }
 
 void EditorManager::constructMenuBar()
@@ -48,5 +48,5 @@ void EditorManager::constructViewport()
 
 void EditorManager::constructSceneHierarchy()
 {
-
+    m_guiManager->showSceneHierarchy(m_editorStates.sceneHierarchyState);
 }

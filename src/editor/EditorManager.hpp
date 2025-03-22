@@ -6,8 +6,10 @@
 
 struct EditorStates
 {
+    bool globalWindowState = true;
     bool menuBarState = true;
     bool viewPortState = true;
+    bool sceneHierarchyState = true;
 };
 
 class EditorManager
