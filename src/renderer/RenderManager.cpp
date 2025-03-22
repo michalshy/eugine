@@ -1,7 +1,6 @@
 #include "RenderManager.hpp"
 #include "GLFW/glfw3.h"
 #include "FrameBuffer.hpp"
-#include "imgui.h"
 #include "gl_demo/RendererGLDemo.hpp"
 #include "gl_renderer/RendererGL.hpp"
 #include "directx_renderer/RendererDX.hpp"

@@ -4,9 +4,6 @@
 #include "common/Renderer.hpp"
 #include "../core/config/ConfigManager.hpp"
 #include "common/RendererStructs.hpp"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 #include "core/alloc/StackAllocator.hpp"
 #include <GLFW/glfw3.h>
 #include "FrameBuffer.hpp"

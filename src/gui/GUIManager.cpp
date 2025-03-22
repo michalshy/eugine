@@ -1,7 +1,8 @@
 #include "GUIManager.hpp"
 #include "imgui.h"
 #include "renderer/RenderManager.hpp"
-
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 GUIManager::GUIManager() { /*Do nothing*/ } 
 GUIManager::~GUIManager() { /*Do nothing*/ }
 
