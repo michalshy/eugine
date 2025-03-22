@@ -1,17 +1,15 @@
 #ifndef RESOURCEMANAGER_HPP
 #define RESOURCEMANAGER_HPP
 
-#include "utils/Manager.hpp"
-
-class ResourceManager : public Manager
+class ResourceManager
 {
 public:
     // Constructor / Destructor
     ResourceManager();
     ~ResourceManager();
     // Interface
-    bool startUp() override;
-    bool shutDown() override;
+    bool startUp();
+    bool shutDown();
 private:
 
 };

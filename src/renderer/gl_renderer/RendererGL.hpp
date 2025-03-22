@@ -19,6 +19,7 @@ public:
     bool init() override;
     bool deinit() override;
     void render() override;
+    FrameBuffer* getFrameBuffer() override;
     ~RendererGL();
 protected:
 };

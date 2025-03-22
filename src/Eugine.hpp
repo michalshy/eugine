@@ -5,9 +5,12 @@
 #include "renderer/RenderManager.hpp"
 #include "core/config/ConfigManager.hpp"
 #include "gui/GUIManager.hpp"
+#include "editor/EditorManager.hpp"
 
 class Eugine
 {
+    EditorManager m_editorManager;
+
     RenderManager m_renderManager;
     GUIManager m_guiManager;
     ConfigManager m_configManager;

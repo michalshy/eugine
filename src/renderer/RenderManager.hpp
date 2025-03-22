@@ -3,19 +3,15 @@
 
 #include "common/Renderer.hpp"
 #include "../core/config/ConfigManager.hpp"
-#include "gl_demo/RendererGLDemo.hpp"
-#include "gl_renderer/RendererGL.hpp"
-#include "directx_renderer/RendererDX.hpp"
+#include "common/RendererStructs.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "core/alloc/StackAllocator.hpp"
-#include "utils/Manager.hpp"
 #include <GLFW/glfw3.h>
-#include "../gui/GUIManager.hpp"
-#include "gl_renderer/FrameBuffer.hpp"
+#include "FrameBuffer.hpp"
 
-class RenderManager : public Manager
+class RenderManager
 {
     //variables
     u32 m_screenWidth, m_screenHeight;
@@ -26,19 +22,20 @@ class RenderManager : public Manager
     GLFWwindow* m_window;
     Renderer* m_renderer;
     ConfigManager* m_configManager;
-    GUIManager* m_guiManager;
 public:
     RenderManager();
-    bool startUp() override;
-    bool shutDown() override;
+    bool startUp(ConfigManager& configManager);
+    bool shutDown();
 
-    void setConfig(ConfigManager& configManager);
     void render();
+
+    FrameBuffer* getFrameBuffer();
+    bool windowState();
+    RenderType getRenderType();
 
     ~RenderManager();
 protected:
     bool lowLevelInit();
-    bool imguiInit();
     bool chooseRenderer();
 };
 

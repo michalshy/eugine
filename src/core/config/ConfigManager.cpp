@@ -1,4 +1,5 @@
 #include "ConfigManager.hpp"
+#include <fstream>
 
 ConfigManager::ConfigManager()
 {

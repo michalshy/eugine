@@ -19,6 +19,11 @@ void RendererDX::render()
 {
 }
 
+FrameBuffer* RendererDX::getFrameBuffer()
+{
+    return nullptr;
+}
+
 RendererDX::~RendererDX()
 {
 

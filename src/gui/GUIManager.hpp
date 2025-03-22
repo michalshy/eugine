@@ -1,25 +1,30 @@
 #ifndef GUIMANAGER_HPP
 #define GUIMANAGER_HPP
 
-#include "../utils/Manager.hpp"
-#include "imgui.h"
 #include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "renderer/RenderManager.hpp"
+#include "core/config/ConfigManager.hpp"
 
-class GUIManager : public Manager
+class GUIManager
 {
-    bool state = true;
+    GLFWwindow* m_window;
+    ConfigManager* m_configManager;
+    RenderManager* m_renderManager;
+    bool m_state = true;
 public:
     // Constructor / Destructor
     GUIManager();
     ~GUIManager();
     // Interface
-    bool startUp() override;
-    bool shutDown() override;
-    // Methods
-    void createGUI();
+    bool startUp(ConfigManager& configManager, RenderManager& renderManager);
+    bool shutDown();
+
+    void preRender();
+    void postRender();
+
+    void showViewport(bool);
 protected:
-    void showMenuFile();
+    bool imguiInit();
 };
 
 #endif

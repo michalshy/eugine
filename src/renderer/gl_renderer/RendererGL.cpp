@@ -17,6 +17,11 @@ void RendererGL::render()
 {
 }
 
+FrameBuffer* RendererGL::getFrameBuffer()
+{
+    return nullptr;
+}
+
 RendererGL::~RendererGL()
 {
 }

@@ -1,116 +1,111 @@
 #include "GUIManager.hpp"
 #include "imgui.h"
+#include "renderer/RenderManager.hpp"
 
 GUIManager::GUIManager() { /*Do nothing*/ } 
 GUIManager::~GUIManager() { /*Do nothing*/ }
 
-bool  GUIManager::startUp() {
+bool  GUIManager::startUp(ConfigManager& configManager, RenderManager& renderManager) {
+    m_configManager = &configManager;
+    m_renderManager = &renderManager;
+
+    if(!imguiInit()) return false;
+
     return true;
 }
 
 bool GUIManager::shutDown() {
     return true;
 }
-// Note that shortcuts are currently provided for display only
-// (future version will add explicit flags to BeginMenu() to request processing shortcuts)
-static void ShowExampleMenuFile()
+
+void GUIManager::preRender()
 {
-    ImGui::MenuItem("(demo menu)", NULL, false, false);
-    if (ImGui::MenuItem("New")) {}
-    if (ImGui::MenuItem("Open", "Ctrl+O")) {}
-    if (ImGui::BeginMenu("Open Recent"))
+    glfwPollEvents();
+    if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) != 0)
     {
-        ImGui::MenuItem("fish_hat.c");
-        ImGui::MenuItem("fish_hat.inl");
-        ImGui::MenuItem("fish_hat.h");
-        if (ImGui::BeginMenu("More.."))
-        {
-            ImGui::MenuItem("Hello");
-            ImGui::MenuItem("Sailor");
-            if (ImGui::BeginMenu("Recurse.."))
-            {
-                ShowExampleMenuFile();
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenu();
-        }
-        ImGui::EndMenu();
+        ImGui_ImplGlfw_Sleep(10);
+        return;
     }
-    if (ImGui::MenuItem("Save", "Ctrl+S")) {}
-    if (ImGui::MenuItem("Save As..")) {}
-
-    ImGui::Separator();
-    if (ImGui::BeginMenu("Options"))
-    {
-        static bool enabled = true;
-        ImGui::MenuItem("Enabled", "", &enabled);
-        ImGui::BeginChild("child", ImVec2(0, 60), ImGuiChildFlags_Borders);
-        for (int i = 0; i < 10; i++)
-            ImGui::Text("Scrolling Text %d", i);
-        ImGui::EndChild();
-        static float f = 0.5f;
-        static int n = 0;
-        ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
-        ImGui::InputFloat("Input", &f, 0.1f);
-        ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
-        ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Colors"))
-    {
-        float sz = ImGui::GetTextLineHeight();
-        for (int i = 0; i < ImGuiCol_COUNT; i++)
-        {
-            const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
-            ImVec2 p = ImGui::GetCursorScreenPos();
-            ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
-            ImGui::Dummy(ImVec2(sz, sz));
-            ImGui::SameLine();
-            ImGui::MenuItem(name);
-        }
-        ImGui::EndMenu();
-    }
-
-    // Here we demonstrate appending again to the "Options" menu (which we already created above)
-    // Of course in this demo it is a little bit silly that this function calls BeginMenu("Options") twice.
-    // In a real code-base using it would make senses to use this feature from very different code locations.
-    if (ImGui::BeginMenu("Options")) // <-- Append!
-    {
-        static bool b = true;
-        ImGui::Checkbox("SomeOption", &b);
-        ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Disabled", false)) // Disabled
-    {
-        IM_ASSERT(0);
-    }
-    if (ImGui::MenuItem("Checked", NULL, true)) {}
-    ImGui::Separator();
-    if (ImGui::MenuItem("Quit", "Alt+F4")) {}
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 }
 
-void GUIManager::createGUI() {
-    IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing ImGui context. Refer to source code and library examples!");
-    IMGUI_CHECKVERSION();
-    if (ImGui::BeginMainMenuBar())
+void GUIManager::postRender()
+{
+    ImGui::Render();
+    int display_w, display_h;
+    
+    glfwGetFramebufferSize(m_window, &display_w, &display_h);
+    glViewport(0, 0, display_w, display_h);
+    glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    // Update and Render additional Platform Windows
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        if (ImGui::BeginMenu("File"))
-        {
-            ShowExampleMenuFile();
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Edit"))
-        {
-            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {} // Disabled item
-            ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-            ImGui::EndMenu();
-        }
-        ImGui::EndMainMenuBar();
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
     }
+    glfwSwapBuffers(m_window);
 }
 
+void GUIManager::showViewport(bool state) {
+    bool p_open = true;
+    static bool use_work_area = true;
+    static ImGuiWindowFlags flags =  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings;
+    
+    if (ImGui::Begin("Viewport", &p_open, flags))
+    {
+        ImGui::Image(
+            m_renderManager->getFrameBuffer()->getTextureColorBuffer(), 
+            ImGui::GetContentRegionAvail(),
+            ImVec2(0, 1), 
+            ImVec2(1, 0)
+        );
+    }
+    ImGui::End();
+}
+
+bool GUIManager::imguiInit()
+{
+    if(m_renderManager->getRenderType() == RenderType::OPENGL)
+    {
+        // Setup Dear ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        // Enable docking
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        // Setup Dear ImGui style
+        ImGui::StyleColorsDark();
+        //ImGui::StyleColorsLight();
+        // Setup Platform/Renderer backends
+        ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+        ImGui_ImplOpenGL3_Init("#version 330");
+        // Load Fonts
+        // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+        // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+        // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+        // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+        // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+        // - Read 'docs/FONTS.md' for more instructions and details.
+        // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+        // - Our Emscripten build process allows embedding fonts to be accessible at runtime from the "fonts/" folder. See Makefile.emscripten for details.
+        //io.Fonts->AddFontDefault();
+        //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+        //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+        //IM_ASSERT(font != nullptr);
+        return true;
+    }
+
+    return false;
+}

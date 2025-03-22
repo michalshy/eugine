@@ -6,23 +6,15 @@
 #include "../gl_renderer/camera/Camera.hpp"
 #include "../common/RendererStructs.hpp"
 #include "core/config/ConfigManager.hpp"
-#include "../gl_renderer/FrameBuffer.hpp"
+#include "../FrameBuffer.hpp"
 #include "stb_image.h"
 
 class RendererGLDemo : public Renderer
 {
+    FrameBuffer m_frameBuffer;
     u32 m_screenWidth, m_screenHeight;
-    u32 quadVAO, quadVBO;
-    u32 planeVAO, planeVBO;
-    unsigned int textureColorbuffer;
-    unsigned int rbo;
-    unsigned int framebuffer;
-    u32 cubeVAO, cubeVBO;
-    unsigned int cubeTexture = loadTexture("./res/default/textures/container2.png");
-    unsigned int floorTexture = loadTexture("./res/default/textures/container2.png");
     ConfigManager* m_configManager;
     GLFWwindow* m_window;
-    Shader shader = Shader("./res/default/shaders/shader.vs", "./res/default/shaders/shader.fs");
     float m_deltaTime, m_lastFrame;
     Shader m_objSh = Shader("./res/default/shaders/shaderModel.vs", "./res/default/shaders/shaderModel.fs");
     Shader m_screenShader = Shader("./res/default/shaders/screen.vs", "./res/default/shaders/screen.fs");
@@ -34,6 +26,7 @@ public:
     bool init() override;
     bool deinit() override;
     void render() override;
+    FrameBuffer* getFrameBuffer() override;
     ~RendererGLDemo();
 protected:
     static Camera m_viewport_camera;

@@ -10,6 +10,7 @@ public:
     bool init() override;
     bool deinit() override;
     void render() override;
+    FrameBuffer* getFrameBuffer() override;
     ~RendererDX();
 private:
 
