@@ -7,10 +7,10 @@ class RendererDX : public Renderer
 {
 public:
     RendererDX();
-    bool init() override;
-    bool deinit() override;
-    void render() override;
-    FrameBuffer* getFrameBuffer() override;
+    bool Init() override;
+    bool Deinit() override;
+    void Render() override;
+    FrameBuffer* GetFrameBuffer() override;
     ~RendererDX();
 private:
 

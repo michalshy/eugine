@@ -9,17 +9,20 @@
 
 class Eugine
 {
-    EditorManager m_editorManager;
-
-    RenderManager m_renderManager;
-    GUIManager m_guiManager;
-    ConfigManager m_configManager;
+    EditorManager editorManager;
+    RenderManager renderManager;
+    GUIManager guiManager;
+    ConfigManager configManager;
 public:
-    Eugine();
+    Eugine() : 
+    renderManager(configManager), 
+    guiManager(configManager, renderManager), 
+    editorManager(configManager, guiManager)
+    { /*Do nothing*/ };
 
-    bool boot();
-    void engine();
-    void shutDown();
+    bool Boot();
+    void Engine();
+    void ShutDown();
 
     ~Eugine();
 };

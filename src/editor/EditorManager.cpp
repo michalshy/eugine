@@ -1,67 +1,63 @@
 #include "EditorManager.hpp"
-#include "core/config/ConfigManager.hpp"
 #include "gui/GUIManager.hpp"
 
-EditorManager::EditorManager(){ /* Do nothing */ }
 EditorManager::~EditorManager(){ /* Do nothing */ }
 
-bool EditorManager::startUp(ConfigManager configManager, GUIManager& guiManager)
+bool EditorManager::StartUp()
 {
-    m_configManager = &configManager;
-    m_guiManager = &guiManager;
-    if(m_configManager == nullptr || m_guiManager == nullptr)
+    if(configManager == nullptr || guiManager == nullptr)
         return false;
     return true;
 }
 
-bool EditorManager::shutDown()
+bool EditorManager::ShutDown()
 {
     return true;
 }
 
-void EditorManager::contructEditor()
+void EditorManager::ContructEditor()
 {
-    m_guiManager->preRender();
+    guiManager->PreGUI();
     
     //Create dockspace and dock windows
-    constructGlobalWindow();
+    ConstructGlobalWindow();
     //Create menu bar
-    constructMenuBar();
-    constructViewport();
-    constructSceneHierarchy();
-    constructInspector();
-    constructAssetBrowser();
+    ConstructMenuBar();
+    ConstructViewport();
+    ConstructSceneHierarchy();
+    ConstructInspector();
+    ConstructAssetBrowser();
 
 
-    m_guiManager->postRender();
+    guiManager->PostGUI();
 }
 
-void EditorManager::constructGlobalWindow()
+void EditorManager::ConstructGlobalWindow()
 {
-    m_guiManager->showGlobalWindow(m_editorStates.globalWindowState);
+    guiManager->ShowGlobalWindow(editorStates.globalWindowState);
 }
 
-void EditorManager::constructMenuBar()
+void EditorManager::ConstructMenuBar()
 {
-    m_guiManager->showMenuBar(m_editorStates.menuBarState);
+    guiManager->ShowMenuBar(editorStates.menuBarState);
 }
 
-void EditorManager::constructViewport()
+void EditorManager::ConstructViewport()
 {
-    m_guiManager->showViewport(m_editorStates.viewPortState);
+    guiManager->ShowViewport(editorStates.viewPortState);
 }
 
-void EditorManager::constructSceneHierarchy()
+void EditorManager::ConstructSceneHierarchy()
 {
-    m_guiManager->showSceneHierarchy(m_editorStates.sceneHierarchyState);
+    guiManager->ShowSceneHierarchy(editorStates.sceneHierarchyState);
 }
 
-void EditorManager::constructInspector()
+void EditorManager::ConstructInspector()
 {
-    m_guiManager->showInspector(m_editorStates.inspectorState);
+    guiManager->ShowInspector(editorStates.inspectorState);
 }
 
-void EditorManager::constructAssetBrowser()
+void EditorManager::ConstructAssetBrowser()
 {
-    m_guiManager->showAssetBrowser(m_editorStates.assetBrowserState);
+    guiManager->ShowAssetBrowser(editorStates.assetBrowserState);
 }

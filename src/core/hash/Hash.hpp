@@ -5,7 +5,7 @@
 #include <string>
 
 //lower letter s is required
-static u64 computeHash(std::string const& s) 
+static u64 ComputeHash(std::string const& s) 
 {
     const u64 p = 31;
     const int m = 1e9 + 9;

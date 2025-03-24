@@ -11,10 +11,10 @@ class Renderer
 {
 public:
     Renderer() = default;
-    virtual bool init() = 0;
-    virtual bool deinit() = 0; 
-    virtual void render() = 0;
-    virtual FrameBuffer* getFrameBuffer() = 0;
+    virtual bool Init() = 0;
+    virtual bool Deinit() = 0; 
+    virtual void Render() = 0;
+    virtual FrameBuffer* GetFrameBuffer() = 0;
     virtual ~Renderer(){};
 };
 

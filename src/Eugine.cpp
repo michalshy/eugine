@@ -1,44 +1,39 @@
 #include "Eugine.hpp"
 
-Eugine::Eugine()
-{
-    //Do nothing
-}
-
 Eugine::~Eugine()
 {
     //Do nothing
 }
 
-bool Eugine::boot()
+bool Eugine::Boot()
 {
-    if(!m_configManager.startUp()) return false;
+    if(!configManager.StartUp()) return false;
     
-    if(!m_renderManager.startUp(m_configManager)) return false;
+    if(!renderManager.StartUp()) return false;
 
-    if(!m_guiManager.startUp(m_configManager, m_renderManager)) return false;
+    if(!guiManager.StartUp()) return false;
 
-    if(!m_editorManager.startUp(m_configManager, m_guiManager)) return false;
+    if(!editorManager.StartUp()) return false;
 
     return true;
 }
 
-void Eugine::engine()
+void Eugine::Engine()
 {
-    while(m_renderManager.windowState())
+    while(renderManager.WindowState())
     {
-        m_renderManager.render();
-        m_editorManager.contructEditor();
+        renderManager.Render();
+        editorManager.ContructEditor();
     }
-    shutDown();
+    ShutDown();
 }
 
-void Eugine::shutDown()
+void Eugine::ShutDown()
 {
-    m_editorManager.shutDown();
-    m_guiManager.shutDown();
-    m_renderManager.shutDown();
-    m_configManager.shutDown();
+    editorManager.ShutDown();
+    guiManager.ShutDown();
+    renderManager.ShutDown();
+    configManager.ShutDown();
 }
 
 

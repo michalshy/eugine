@@ -8,32 +8,32 @@ constexpr u32 kSTACK_ALLOCATOR_SIZE = 1024 * 1024;
 
 class StackAllocator
 {
-    u8 m_memory[kSTACK_ALLOCATOR_SIZE];
-    u32 m_marker;
-    u32 m_markers[100];
-    u32 m_markerIndex;
+    u8 memory[kSTACK_ALLOCATOR_SIZE];
+    u32 marker;
+    u32 markers[100];
+    u32 markerIndex;
 public:
-    explicit StackAllocator() : m_marker(0), m_markerIndex(0){}
-    void* alloc(u32 size)
+    explicit StackAllocator() : marker(0), markerIndex(0){}
+    void* Alloc(u32 size)
     {
-        if(m_marker + size > kSTACK_ALLOCATOR_SIZE)
+        if(marker + size > kSTACK_ALLOCATOR_SIZE)
         {
             return nullptr;
         }
-        void* ptr = m_memory + m_marker;
-        m_markers[m_markerIndex++] = m_marker;
-        m_marker += size;
+        void* ptr = memory + marker;
+        markers[markerIndex++] = marker;
+        marker += size;
         return ptr;
     }
-    void free()
+    void Free()
     {
-        ZeroMemory(m_memory + m_marker, m_marker - m_markers[m_markerIndex]);
-        m_marker -= m_markers[m_markerIndex--];
+        ZeroMemory(memory + marker, marker - markers[markerIndex]);
+        marker -= markers[markerIndex--];
     }
-    void clear()
+    void Clear()
     {
-        ZeroMemory(m_memory, kSTACK_ALLOCATOR_SIZE);
-        m_marker = 0;
+        ZeroMemory(memory, kSTACK_ALLOCATOR_SIZE);
+        marker = 0;
     }
     ~StackAllocator(){}
 

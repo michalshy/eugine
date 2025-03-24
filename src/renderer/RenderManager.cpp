@@ -6,81 +6,77 @@
 #include "directx_renderer/RendererDX.hpp"
 #include "renderer/common/RendererStructs.hpp"
 
-RenderManager::RenderManager()
-{
-    //Do nothing
-}
-
 RenderManager::~RenderManager()
 {
     //Do nothing
 }
 
-bool RenderManager::startUp(ConfigManager& configManager)
+bool RenderManager::StartUp()
 {
-    m_configManager = &configManager;
+    //check pointer
+    if(configManager == nullptr) return false;
     //initialize glad, opengl, glfw
-    if(!lowLevelInit()) return false;
+    if(!LowLevelInit()) return false;
     //check for renderer
-    if(!chooseRenderer()) return false;
+    if(!ChooseRenderer()) return false;
     //initialize renderer
-    if(!m_renderer->init()) return false;
+    if(!renderer->Init()) return false;
     return true;
 }
 
-bool RenderManager::shutDown()
+bool RenderManager::ShutDown()
 {
     
     // Cleanup glfw
-    glfwDestroyWindow(m_window);
+    glfwDestroyWindow(window);
     glfwTerminate();
     //Clear stack allocator
-    m_allocator.clear();
+    allocator.Clear();
     return true;
 }
 
-void RenderManager::render()
+void RenderManager::Render()
 {
-    m_renderer->render();
+    renderer->Render();
 }
 
-FrameBuffer* RenderManager::getFrameBuffer()
+FrameBuffer* RenderManager::GetFrameBuffer()
 {
-    return m_renderer->getFrameBuffer();
+    return renderer->GetFrameBuffer();
 }
 
-bool RenderManager::windowState()
+bool RenderManager::WindowState()
 {
-    return !glfwWindowShouldClose(m_window);
+    return !glfwWindowShouldClose(window);
 }
 
-RenderType RenderManager::getRenderType()
+RenderType RenderManager::GetRenderType()
 {
-    return m_rType;
+    return renderType;
 }
 
-GLFWwindow* RenderManager::getWindow()
+GLFWwindow* RenderManager::GetWindow()
 {
-    return m_window;
+    return window;
 }
 
-bool RenderManager::lowLevelInit()
+bool RenderManager::LowLevelInit()
 {
-    m_screenHeight = std::stoi(m_configManager->getEngineOption("renderer", "screen_height"));
-    m_screenWidth = std::stoi(m_configManager->getEngineOption("renderer", "screen_width"));
+    screenHeight = std::stoi(configManager->GetEngineOption("renderer", "screen_height"));
+    screenWidth = std::stoi(configManager->GetEngineOption("renderer", "screen_width"));
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     // Create window
-    m_window = glfwCreateWindow(800, 600, "EUGINE", NULL, NULL);
-    if (m_window == NULL)
+    window = glfwCreateWindow(800, 600, "EUGINE", NULL, NULL);
+    if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return false;
     }
-    glfwMakeContextCurrent(m_window);
+    glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
     // Setup GLAD
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -89,37 +85,37 @@ bool RenderManager::lowLevelInit()
         return false;
     }
     
-    glViewport(0, 0, m_screenWidth, m_screenHeight);
+    glViewport(0, 0, screenWidth, screenHeight);
 
     return true;
 }
 
-bool RenderManager::chooseRenderer()
+bool RenderManager::ChooseRenderer()
 {
     //Define type
-    std::string type = m_configManager->getEngineOption("renderer", "type");
+    std::string type = configManager->GetEngineOption("renderer", "type");
     if(type == "opengl")
-        m_rType = RenderType::OPENGL;
+        renderType = RenderType::OPENGL;
     else if(type == "directx")
-        m_rType = RenderType::DIRECTX;
+        renderType = RenderType::DIRECTX;
     else 
-        m_rType = RenderType::OPENGL;
+        renderType = RenderType::OPENGL;
 
     //check if demo or real renderer is loaded
-    std::string isDemo = m_configManager->getEngineOption("renderer", "demo");
+    std::string isDemo = configManager->GetEngineOption("renderer", "demo");
     
-    if(m_rType == RenderType::OPENGL)
+    if(renderType == RenderType::OPENGL)
     {
         //check if demo should be played
         if(isDemo == "y")
         {
             //allocate memory for demo renderer
-            void* addr = m_allocator.alloc(sizeof(RendererGLDemo));
+            void* addr = allocator.Alloc(sizeof(RendererGLDemo));
             if(addr != nullptr) //if success
             {
                 //allocate new object at address
                 //IMPORTANT: THIS IS NOT SYSCALL
-                m_renderer = new (addr) RendererGLDemo(*m_configManager, m_window);
+                renderer = new (addr) RendererGLDemo(*configManager, window);
             }
             else 
             {
@@ -129,20 +125,20 @@ bool RenderManager::chooseRenderer()
         else
         {
             //allocate memory for standard OpenGL renderer
-            void* addr = m_allocator.alloc(sizeof(RendererGL));
+            void* addr = allocator.Alloc(sizeof(RendererGL));
             if(addr != nullptr)
                 //allocate new object at address
                 //IMPORTANT: THIS IS NOT SYSCALL
-                m_renderer = new (addr) RendererGL(*m_configManager);
+                renderer = new (addr) RendererGL(*configManager);
             else
                 return false;
         }
     }
-    else if(m_rType == RenderType::DIRECTX) //check for direct, other instructions are the same
+    else if(renderType == RenderType::DIRECTX) //check for direct, other instructions are the same
     {
-        void* addr = m_allocator.alloc(sizeof(RendererDX));
+        void* addr = allocator.Alloc(sizeof(RendererDX));
         if(addr != nullptr)
-            m_renderer = new (addr) RendererDX();
+            renderer = new (addr) RendererDX();
         else
             return false;
     }

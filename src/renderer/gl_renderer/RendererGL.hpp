@@ -9,15 +9,14 @@
 
 class RendererGL : public Renderer
 {
-    u32 SCREEN_WIDTH, SCREEN_HEIGHT;
-    ConfigManager* m_configManager;
+    ConfigManager* configManager;
 public:
-    RendererGL(ConfigManager& configManager)
-    : m_configManager(&configManager){}
-    bool init() override;
-    bool deinit() override;
-    void render() override;
-    FrameBuffer* getFrameBuffer() override;
+    RendererGL(ConfigManager& _configManager)
+    : configManager(&_configManager){}
+    bool Init() override;
+    bool Deinit() override;
+    void Render() override;
+    FrameBuffer* GetFrameBuffer() override;
     ~RendererGL();
 protected:
 };

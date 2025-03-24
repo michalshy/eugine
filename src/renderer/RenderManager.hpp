@@ -7,34 +7,35 @@
 #include "core/alloc/StackAllocator.hpp"
 #include <GLFW/glfw3.h>
 #include "FrameBuffer.hpp"
+#include "utils/Subsystem.hpp"
 
-class RenderManager
+class RenderManager : public Subsystem
 {
     //variables
-    u32 m_screenWidth, m_screenHeight;
-    RenderType m_rType;
+    u32 screenWidth, screenHeight;
+    RenderType renderType;
     //memory
-    StackAllocator m_allocator;
+    StackAllocator allocator;
     //pointers
-    GLFWwindow* m_window;
-    Renderer* m_renderer;
-    ConfigManager* m_configManager;
+    GLFWwindow* window;
+    Renderer* renderer;
+    ConfigManager* configManager;
 public:
-    RenderManager();
-    bool startUp(ConfigManager& configManager);
-    bool shutDown();
+    RenderManager(ConfigManager& _configManager) : configManager(&_configManager) { /* Do nothing! */ };
+    bool StartUp() override;
+    bool ShutDown() override;
 
-    void render();
+    void Render();
 
-    FrameBuffer* getFrameBuffer();
-    bool windowState();
-    RenderType getRenderType();
-    GLFWwindow* getWindow();
+    FrameBuffer* GetFrameBuffer();
+    bool WindowState();
+    RenderType GetRenderType();
+    GLFWwindow* GetWindow();
 
     ~RenderManager();
 protected:
-    bool lowLevelInit();
-    bool chooseRenderer();
+    bool LowLevelInit();
+    bool ChooseRenderer();
 };
 
 #endif

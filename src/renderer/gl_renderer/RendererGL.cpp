@@ -1,23 +1,20 @@
 #include "RendererGL.hpp"
 
-bool RendererGL::init()
-{
-    SCREEN_WIDTH = std::stoi(m_configManager->getEngineOption("renderer", "screen_width"));
-    SCREEN_HEIGHT = std::stoi(m_configManager->getEngineOption("renderer", "screen_height"));
-
-    return true;
-}
-
-bool RendererGL::deinit()
+bool RendererGL::Init()
 {
     return true;
 }
 
-void RendererGL::render()
+bool RendererGL::Deinit()
+{
+    return true;
+}
+
+void RendererGL::Render()
 {
 }
 
-FrameBuffer* RendererGL::getFrameBuffer()
+FrameBuffer* RendererGL::GetFrameBuffer()
 {
     return nullptr;
 }

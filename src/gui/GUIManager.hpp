@@ -3,32 +3,36 @@
 
 #include "renderer/RenderManager.hpp"
 #include "core/config/ConfigManager.hpp"
+#include "utils/Subsystem.hpp"
 
-class GUIManager
+class GUIManager : public Subsystem
 {
-    GLFWwindow* m_window;
-    ConfigManager* m_configManager;
-    RenderManager* m_renderManager;
-    bool m_firstTime = true;
+    GLFWwindow* window;
+    ConfigManager* configManager;
+    RenderManager* renderManager;
+    bool firstTime = true;
 public:
     // Constructor / Destructor
-    GUIManager();
+    GUIManager(ConfigManager& _configManager, RenderManager& _renderManager) :
+        configManager(&_configManager),
+        renderManager(&_renderManager)
+    { /* Do nothing */ }
     ~GUIManager();
     // Interface
-    bool startUp(ConfigManager& configManager, RenderManager& renderManager);
-    bool shutDown();
+    bool StartUp() override;
+    bool ShutDown() override;
 
-    void preRender();
-    void postRender();
+    void PreGUI();
+    void PostGUI();
 
-    void showGlobalWindow(bool);
-    void showMenuBar(bool);
-    void showViewport(bool);
-    void showSceneHierarchy(bool);
-    void showInspector(bool);
-    void showAssetBrowser(bool);
+    void ShowGlobalWindow(bool);
+    void ShowMenuBar(bool);
+    void ShowViewport(bool);
+    void ShowSceneHierarchy(bool);
+    void ShowInspector(bool);
+    void ShowAssetBrowser(bool);
 protected:
-    bool imguiInit();
+    bool ImguiInit();
 };
 
 #endif

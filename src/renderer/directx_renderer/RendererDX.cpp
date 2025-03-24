@@ -5,21 +5,21 @@ RendererDX::RendererDX()
 
 }
 
-bool RendererDX::init()
+bool RendererDX::Init()
 {
     return false;
 }
 
-bool RendererDX::deinit()
+bool RendererDX::Deinit()
 {
     return false;
 }
 
-void RendererDX::render()
+void RendererDX::Render()
 {
 }
 
-FrameBuffer* RendererDX::getFrameBuffer()
+FrameBuffer* RendererDX::GetFrameBuffer()
 {
     return nullptr;
 }

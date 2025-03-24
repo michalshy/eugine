@@ -2,20 +2,20 @@
 
 Model::Model(const char* path)
 {
-    loadModel(path);
+    LoadModel(path);
 }
 
 Model::~Model(){ /* Do nothing */ }
 
-void Model::draw(Shader& shader)
+void Model::Draw(Shader& shader)
 {
     for(u32 i = 0; i < meshes.size(); i++)
     {
-        meshes[i].draw(shader);
+        meshes[i].Draw(shader);
     }
 }
 
-void Model::loadModel(std::string path)
+void Model::LoadModel(std::string path)
 {
     // read file via ASSIMP
     Assimp::Importer importer;
@@ -32,10 +32,10 @@ void Model::loadModel(std::string path)
     //flip textures
     stbi_set_flip_vertically_on_load(true);
     // process ASSIMP's root node recursively
-    processNode(scene->mRootNode, scene);
+    ProcessNode(scene->mRootNode, scene);
 }
 
-void Model::processNode(aiNode *node, const aiScene *scene)
+void Model::ProcessNode(aiNode *node, const aiScene *scene)
 {
     // process each mesh located at the current node
     for(u32 i = 0; i < node->mNumMeshes; i++)
@@ -43,16 +43,16 @@ void Model::processNode(aiNode *node, const aiScene *scene)
         // the node object only contains indices to index the actual objects in the scene. 
         // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene));
+        meshes.push_back(ProcessMesh(mesh, scene));
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
     for(u32 i = 0; i < node->mNumChildren; i++)
     {
-        processNode(node->mChildren[i], scene);
+        ProcessNode(node->mChildren[i], scene);
     }
 }
 
-Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
+Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 {
     // data to fill
     std::vector<Vertex> vertices;
@@ -110,10 +110,10 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     // normal: texture_normalN
 
     // 1. diffuse maps
-    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::DIFFUSE);
+    std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::DIFFUSE);
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
     // 2. specular maps
-    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, TexType::SPECULAR);
+    std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::SPECULAR);
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     // // 3. normal maps
     // std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
@@ -126,7 +126,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     return Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, TexType typeName)
+std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, TexType typeName)
 {
     std::vector<Texture> textures;
     for(u32 i = 0; i < mat->GetTextureCount(type); i++)
@@ -147,7 +147,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
         if(!skip)
         {   // if texture hasn't been loaded already, load it
             Texture texture;
-            texture.id = textureFromFile(str.C_Str(), this->directory);
+            texture.id = TextureFromFile(str.C_Str(), this->directory);
             texture.type = typeName;
             texture.path = str.C_Str();
             textures.push_back(texture);
@@ -157,7 +157,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
     return textures;
 }
 
-u32 Model::textureFromFile(const char* path, const std::string& directory) {
+u32 Model::TextureFromFile(const char* path, const std::string& directory) {
     std::string fileName = std::string(path);
     fileName = directory + '/' + fileName;
     u32 textureID;

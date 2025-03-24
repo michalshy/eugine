@@ -6,21 +6,23 @@ ConfigManager::ConfigManager()
     //Do nothing
 }
 
-bool ConfigManager::startUp()
+bool ConfigManager::StartUp()
 {
-    parseConfig();
+    ParseConfig();
     return true;
 }
 
-void ConfigManager::parseConfig()
+void ConfigManager::ParseConfig()
 {
-    parseEngineConfig();
+    ParseEngineConfig();
+    ParseResourceConfig();
+    ParseAddonsConfig();
 }
 
-std::string ConfigManager::getEngineOption(std::string section, std::string key)
+std::string ConfigManager::GetEngineOption(std::string section, std::string key)
 {
     std::list<Option>::iterator it;
-    for(it = m_engineOptions.begin(); it != m_engineOptions.end(); ++it)
+    for(it = engineOptions.begin(); it != engineOptions.end(); ++it)
     {
         if(it->section == section)
         {
@@ -33,7 +35,7 @@ std::string ConfigManager::getEngineOption(std::string section, std::string key)
     return "";
 }
 
-bool ConfigManager::shutDown()
+bool ConfigManager::ShutDown()
 {
     return true;
 }
@@ -43,7 +45,7 @@ ConfigManager::~ConfigManager()
     //Do nothing
 }
 
-void ConfigManager::parseEngineConfig()
+void ConfigManager::ParseEngineConfig()
 {
     std::ifstream file("./config/eugine.cfg");
     std::string lastSection = "";
@@ -77,7 +79,7 @@ void ConfigManager::parseEngineConfig()
                 else
                 {
                     //process key value pair
-                    m_engineOptions.emplace_back(lastSection, line.substr(0, idx), line.substr(idx + 1, line.size() - 1));
+                    engineOptions.emplace_back(lastSection, line.substr(0, idx), line.substr(idx + 1, line.size() - 1));
                 }
             }
         }
@@ -89,10 +91,10 @@ void ConfigManager::parseEngineConfig()
     file.close();
 }
 
-void ConfigManager::parseResourceConfig()
+void ConfigManager::ParseResourceConfig()
 {
 }
 
-void ConfigManager::parseAddonsConfig()
+void ConfigManager::ParseAddonsConfig()
 {
 }

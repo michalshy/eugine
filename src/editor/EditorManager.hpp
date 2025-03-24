@@ -3,7 +3,7 @@
 
 #include "core/config/ConfigManager.hpp"
 #include "gui/GUIManager.hpp"
-
+#include "utils/Subsystem.hpp"
 struct EditorStates
 {
     bool globalWindowState = true;
@@ -14,24 +14,27 @@ struct EditorStates
     bool assetBrowserState = true;
 };
 
-class EditorManager
+class EditorManager : public Subsystem
 {
-    ConfigManager* m_configManager;
-    GUIManager* m_guiManager;
-    EditorStates m_editorStates;
+    ConfigManager* configManager;
+    GUIManager* guiManager;
+    EditorStates editorStates;
 public:
-    EditorManager();
+    EditorManager(ConfigManager& _configManager, GUIManager& _guiManager) :
+        configManager(&_configManager),
+        guiManager(&_guiManager)
+    { /* Do nothing */ }
     ~EditorManager();
-    bool startUp(ConfigManager configManager, GUIManager& guiManager);
-    bool shutDown();
-    void contructEditor();
+    bool StartUp() override;
+    bool ShutDown() override;
+    void ContructEditor();
 private:
-    void constructGlobalWindow();
-    void constructMenuBar();
-    void constructViewport();
-    void constructSceneHierarchy();
-    void constructInspector();
-    void constructAssetBrowser();
+    void ConstructGlobalWindow();
+    void ConstructMenuBar();
+    void ConstructViewport();
+    void ConstructSceneHierarchy();
+    void ConstructInspector();
+    void ConstructAssetBrowser();
 };
 
 #endif

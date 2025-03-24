@@ -4,20 +4,18 @@
 #include "renderer/RenderManager.hpp"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-GUIManager::GUIManager() { /*Do nothing*/ } 
+
 GUIManager::~GUIManager() { /*Do nothing*/ }
 
-bool  GUIManager::startUp(ConfigManager& configManager, RenderManager& renderManager) {
-    m_configManager = &configManager;
-    m_renderManager = &renderManager;
-    m_window = m_renderManager->getWindow();
-
-    if(!imguiInit()) return false;
-
+bool  GUIManager::StartUp() {
+    window = renderManager->GetWindow();
+    if(renderManager == nullptr) return false;
+    if(configManager == nullptr) return false;
+    if(!ImguiInit()) return false;
     return true;
 }
 
-bool GUIManager::shutDown() {
+bool GUIManager::ShutDown() {
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
@@ -26,10 +24,10 @@ bool GUIManager::shutDown() {
     return true;
 }
 
-void GUIManager::preRender()
+void GUIManager::PreGUI()
 {
     glfwPollEvents();
-    if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) != 0)
+    if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
     {
         ImGui_ImplGlfw_Sleep(10);
         return;
@@ -39,11 +37,11 @@ void GUIManager::preRender()
     ImGui::NewFrame();
 }
 
-void GUIManager::postRender()
+void GUIManager::PostGUI()
 {
     ImGui::Render();
     int display_w, display_h;
-    glfwGetFramebufferSize(m_window, &display_w, &display_h);
+    glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -56,18 +54,17 @@ void GUIManager::postRender()
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
-    glfwSwapBuffers(m_window);
+    glfwSwapBuffers(window);
 }
 
-void GUIManager::showGlobalWindow(bool state) {
+void GUIManager::ShowGlobalWindow(bool state) {
 
-    const float WINDOW_AND_STATUS_BAR_HEIGHT = ImGui::GetFrameHeight() * 2.0f;
     const auto &viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(
         ImVec2(viewport->Pos.x, viewport->Pos.y + ImGui::GetFrameHeight()));
     ImGui::SetNextWindowSize(ImVec2(
         // Extract status bar from viewport size
-        viewport->Size.x, viewport->Size.y - WINDOW_AND_STATUS_BAR_HEIGHT));
+        viewport->Size.x, viewport->Size.y));
     ImGui::SetNextWindowViewport(viewport->ID);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
@@ -87,7 +84,7 @@ void GUIManager::showGlobalWindow(bool state) {
     ImGui::DockSpace(dockspaceId, ImVec2{0.0f, 0.0f},
                      ImGuiDockNodeFlags_PassthruCentralNode);
   
-    if (m_firstTime) {
+    if (firstTime) {
       ImGui::DockBuilderRemoveNode(dockspaceId);
       ImGui::DockBuilderAddNode(dockspaceId,
                                 ImGuiDockNodeFlags_DockSpace |
@@ -116,13 +113,13 @@ void GUIManager::showGlobalWindow(bool state) {
       ImGui::DockBuilderDockWindow("Asset Browser", browserId);
   
       ImGui::DockBuilderFinish(dockspaceId);
-      m_firstTime = false;
+      firstTime = false;
     }
   
     ImGui::End();
 }
 
-void GUIManager::showMenuBar(bool state) {
+void GUIManager::ShowMenuBar(bool state) {
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -138,11 +135,11 @@ void GUIManager::showMenuBar(bool state) {
     }
 }
 
-void GUIManager::showViewport(bool state) {
+void GUIManager::ShowViewport(bool state) {
     if (ImGui::Begin("Viewport", &state, 0))
     {
         ImGui::Image(
-            m_renderManager->getFrameBuffer()->getTextureColorBuffer(), 
+            renderManager->GetFrameBuffer()->GetTextureColorBuffer(), 
             ImGui::GetContentRegionAvail(),
             ImVec2(0, 1), 
             ImVec2(1, 0)
@@ -151,7 +148,7 @@ void GUIManager::showViewport(bool state) {
     ImGui::End();
 }
 
-void GUIManager::showSceneHierarchy(bool state) {
+void GUIManager::ShowSceneHierarchy(bool state) {
     if (ImGui::Begin("Hierarchy", &state, 0))
     {
         ImGui::Text("Hierarchy");
@@ -159,7 +156,7 @@ void GUIManager::showSceneHierarchy(bool state) {
     ImGui::End();
 }
 
-void GUIManager::showInspector(bool state) {
+void GUIManager::ShowInspector(bool state) {
     if (ImGui::Begin("Inspector", &state, 0))
     {
         ImGui::Text("Inspector");
@@ -167,7 +164,7 @@ void GUIManager::showInspector(bool state) {
     ImGui::End();
 }
 
-void GUIManager::showAssetBrowser(bool state) {
+void GUIManager::ShowAssetBrowser(bool state) {
     if (ImGui::Begin("Asset Browser", &state, 0))
     {
         ImGui::Text("Asset Browser");
@@ -175,9 +172,9 @@ void GUIManager::showAssetBrowser(bool state) {
     ImGui::End();
 }
 
-bool GUIManager::imguiInit()
+bool GUIManager::ImguiInit()
 {
-    if(m_renderManager->getRenderType() == RenderType::OPENGL)
+    if(renderManager->GetRenderType() == RenderType::OPENGL)
     {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
@@ -192,7 +189,7 @@ bool GUIManager::imguiInit()
         ImGui::StyleColorsDark();
         //ImGui::StyleColorsLight();
         // Setup Platform/Renderer backends
-        ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 330");
         // Load Fonts
         // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

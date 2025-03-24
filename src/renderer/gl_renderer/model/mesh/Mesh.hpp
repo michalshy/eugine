@@ -8,18 +8,18 @@
 
 class Mesh
 {
-    std::vector<Vertex> m_vertices;
-    std::vector<u32> m_indices;
-    std::vector<Texture> m_textures;
+    std::vector<Vertex> vertices;
+    std::vector<u32> indices;
+    std::vector<Texture> textures;
 public:
-    Mesh(std::vector<Vertex> vertices, 
-        std::vector<u32> indices, 
-        std::vector<Texture> textures);
+    Mesh(std::vector<Vertex> _vertices, 
+        std::vector<u32> _indices, 
+        std::vector<Texture> _textures);
     ~Mesh();
-    void draw(Shader& shader);
+    void Draw(Shader& shader);
 private:
     u32 VAO, VBO, EBO;
-    void setupMesh();
+    void SetupMesh();
 };
 
 #endif

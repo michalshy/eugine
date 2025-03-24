@@ -5,10 +5,8 @@
 int main()
 {
     Eugine eng;
-    if(!eng.boot())
+    if(!eng.Boot())
         return -1;
-    eng.engine();
-    return 0;
-
+    eng.Engine();
     return 0;
 }

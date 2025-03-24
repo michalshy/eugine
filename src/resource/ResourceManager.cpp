@@ -3,12 +3,12 @@
 ResourceManager::ResourceManager(){ /* Do nothing! */ }
 ResourceManager::~ResourceManager(){ /* Do nothing! */ }
 
-bool ResourceManager::startUp()
+bool ResourceManager::StartUp()
 {
     return true;
 }
 
-bool ResourceManager::shutDown()
+bool ResourceManager::ShutDown()
 {
     return true;
 }
