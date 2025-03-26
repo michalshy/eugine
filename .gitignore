@@ -4,3 +4,4 @@ res/shaders
 res/models
 .vscode
 .cache
+config/imgui.ini
