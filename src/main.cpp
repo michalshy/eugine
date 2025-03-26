@@ -1,6 +1,7 @@
 #include "Eugine.hpp"
+#include "diagnostic/logger/Logger.hpp"
 
-
+Logger logger;
 
 int main()
 {

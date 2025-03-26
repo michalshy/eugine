@@ -2,7 +2,7 @@
 #define RENDERERGL_HPP
 
 #include "../common/Renderer.hpp"
-#include "core/config/ConfigManager.hpp"
+#include "config/ConfigManager.hpp"
 #include "stb_image.h"
 #include <glfw/glfw3.h>
 

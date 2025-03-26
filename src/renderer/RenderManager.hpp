@@ -2,12 +2,14 @@
 #define RENDERMANAGER_HPP
 
 #include "common/Renderer.hpp"
-#include "../core/config/ConfigManager.hpp"
+#include "../config/ConfigManager.hpp"
 #include "common/RendererStructs.hpp"
 #include "core/alloc/StackAllocator.hpp"
 #include <GLFW/glfw3.h>
 #include "FrameBuffer.hpp"
 #include "utils/Subsystem.hpp"
+
+constexpr u32 DEFAULT_RENDERER_SIZE = 1024 * 1024;
 
 class RenderManager : public Subsystem
 {
@@ -21,7 +23,10 @@ class RenderManager : public Subsystem
     Renderer* renderer;
     ConfigManager* configManager;
 public:
-    RenderManager(ConfigManager& _configManager) : configManager(&_configManager) { /* Do nothing! */ };
+    RenderManager(ConfigManager& _configManager) : 
+        configManager(&_configManager), 
+        allocator(DEFAULT_RENDERER_SIZE) 
+    { /* Do nothing! */ };
     bool StartUp() override;
     bool ShutDown() override;
 

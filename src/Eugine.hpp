@@ -3,7 +3,7 @@
 
 #define GL_SILENCE_DEPRECATION
 #include "renderer/RenderManager.hpp"
-#include "core/config/ConfigManager.hpp"
+#include "config/ConfigManager.hpp"
 #include "gui/GUIManager.hpp"
 #include "editor/EditorManager.hpp"
 

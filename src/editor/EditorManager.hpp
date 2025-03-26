@@ -1,7 +1,7 @@
 #ifndef EDITOR_HPP
 #define EDITOR_HPP
 
-#include "core/config/ConfigManager.hpp"
+#include "config/ConfigManager.hpp"
 #include "gui/GUIManager.hpp"
 #include "utils/Subsystem.hpp"
 struct EditorStates

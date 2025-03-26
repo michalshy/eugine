@@ -4,8 +4,6 @@ cmake_minimum_required(VERSION 3.20)
 set(CMAKE_CXX_STANDARD 17)
 project(eugine)
 
-
-
 # Include directiories
 include_directories(${OPENGL_INCLUDE_DIRS}
                     src
@@ -24,11 +22,19 @@ add_subdirectory(libs/assimp)
 
 include(FetchContent)
 FetchContent_Declare(
-    glm
-	GIT_REPOSITORY	https://github.com/g-truc/glm.git
-	GIT_TAG 	bf71a834948186f4097caa076cd2663c69a10e1e #refs/tags/1.0.1
-    )
-    FetchContent_MakeAvailable(glm)
+glm
+GIT_REPOSITORY	https://github.com/g-truc/glm.git
+GIT_TAG 	bf71a834948186f4097caa076cd2663c69a10e1e #refs/tags/1.0.1
+)
+FetchContent_MakeAvailable(glm)
+
+Include(FetchContent)
+FetchContent_Declare(
+    Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG        v3.4.0 # or a later release
+)
+FetchContent_MakeAvailable(Catch2)
 
 find_package(OpenGL REQUIRED)
 FetchContent_Declare(imgui_external
@@ -52,7 +58,13 @@ set(IMGUI_FILES
     libs/imgui/backends/imgui_impl_opengl3.cpp
     libs/imgui/backends/imgui_impl_glfw.cpp)
 
-# Search for files
+# Search for test files
+file(GLOB_RECURSE TestSRCs
+    ${PROJECT_SOURCE_DIR}/test/*.cpp
+    ${PROJECT_SOURCE_DIR}/test/*.hpp
+    )
+
+# Search for project files
 file(GLOB_RECURSE SRCs
        ${PROJECT_SOURCE_DIR}/src/*.cpp
        ${PROJECT_SOURCE_DIR}/src/*.hpp
@@ -83,3 +95,11 @@ target_link_libraries(eugine
     assimp
     ${Boost_LIBRARIES}
 )
+
+# TESTS
+
+add_executable(tests test/main.cpp)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+include(CTest)
+include(Catch)
+catch_discover_tests(tests)

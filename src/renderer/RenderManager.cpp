@@ -5,6 +5,7 @@
 #include "gl_renderer/RendererGL.hpp"
 #include "directx_renderer/RendererDX.hpp"
 #include "renderer/common/RendererStructs.hpp"
+#include "diagnostic/logger/Logger.hpp"
 
 RenderManager::~RenderManager()
 {

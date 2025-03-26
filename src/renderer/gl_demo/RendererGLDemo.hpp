@@ -5,7 +5,7 @@
 #include "../gl_renderer/model/Model.hpp"
 #include "../gl_renderer/camera/Camera.hpp"
 #include "../common/RendererStructs.hpp"
-#include "core/config/ConfigManager.hpp"
+#include "config/ConfigManager.hpp"
 #include "../FrameBuffer.hpp"
 #include "stb_image.h"
 

@@ -2,7 +2,7 @@
 #define GUIMANAGER_HPP
 
 #include "renderer/RenderManager.hpp"
-#include "core/config/ConfigManager.hpp"
+#include "config/ConfigManager.hpp"
 #include "utils/Subsystem.hpp"
 
 class GUIManager : public Subsystem
