@@ -98,7 +98,13 @@ target_link_libraries(eugine
 
 # TESTS
 
-add_executable(tests test/main.cpp)
+# Search for project files
+file(GLOB_RECURSE TestsSRCs
+       ${PROJECT_SOURCE_DIR}/test/*.cpp)
+
+add_executable(tests 
+    ${TestsSRCs}
+    )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 include(CTest)
 include(Catch)

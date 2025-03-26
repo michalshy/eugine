@@ -23,11 +23,11 @@ inline void CopyMemory(void* dest, void* src, u32 size)
     }
 }
 
-inline void* AlignAddressForward(void* address, u8 alignment)
+inline usize AlignAddressForward(usize address, u8 alignment)
 {
     const u8 mask = alignment - 1;
     assert((alignment & mask) == 0 && "Alignment is not a power of 2!");
-    return reinterpret_cast<void*>((reinterpret_cast<usize>(address) + mask) & ~mask);
+    return (reinterpret_cast<usize>(address) + mask) & ~mask;
 }
 
 template<typename T>
