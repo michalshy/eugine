@@ -42,7 +42,10 @@ public:
         marker = 0;
     }
     void* GetMarker() { return marker; }
-    ~StackAllocator(){}
+    u32 GetMemorySize() { return memorySize; }
+    ~StackAllocator(){
+        delete [] memory;
+    }
 
 private:
 
