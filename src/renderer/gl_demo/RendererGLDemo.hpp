@@ -2,7 +2,7 @@
 #define RENDERERGLDEMO_HPP
 
 #include "../common/Renderer.hpp"
-#include "../gl_renderer/model/Model.hpp"
+#include "../gl_renderer/shader/Shader.hpp"
 #include "../gl_renderer/camera/Camera.hpp"
 #include "../common/RendererStructs.hpp"
 #include "config/ConfigManager.hpp"
@@ -18,7 +18,6 @@ class RendererGLDemo : public Renderer
     float deltaTime, lastFrame;
     Shader objectShader = Shader("./res/default/shaders/shaderModel.vs", "./res/default/shaders/shaderModel.fs");
     Shader screenShader = Shader("./res/default/shaders/screen.vs", "./res/default/shaders/screen.fs");
-    Model demoObject = Model("./res/models/backpack/backpack.obj");
 public:
     RendererGLDemo(ConfigManager& _configManager, GLFWwindow* _window)
     : configManager(&_configManager), window(_window)

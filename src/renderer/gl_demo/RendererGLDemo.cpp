@@ -51,7 +51,6 @@ void RendererGLDemo::Render()
     model = glm::translate(model, glm::vec3(0.f, 0.f, 0.f));
     model = glm::scale(model, glm::vec3(1.f, 1.f, 1.f));
     objectShader.SetMat4("model", model);
-    demoObject.Draw(objectShader);
 
     // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
