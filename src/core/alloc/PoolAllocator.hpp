@@ -2,18 +2,51 @@
 #define POOLALLOCATOR_HPP
 
 #include "TypeDef.hpp"
+#include "exceptions/memory/MemoryExceptions.hpp"
+#include <set>
 
-template<class T>
+/**
+ * @brief Basic pool allocator with FIXED size
+ * 
+ * @tparam T Type of element to allocate 
+ * TODO: Add dynamic resizing of pool allocator
+ */
+
+template <class T>
 class PoolAllocator {
-    u32 size;
-    T* memory;
+    usize chunksPerBlock;
+    u8* memory;
+    std::set<u8*> freeBlocks;
 public:
-    PoolAllocator<T>(u32 _size): size(_size) {
-        memory = new T[size];
+    PoolAllocator(usize _chunksPerBlock) : chunksPerBlock(_chunksPerBlock) 
+    {
+        memory = new u8[sizeof(T) * chunksPerBlock];
+        PushFreeBlocks();
     }
-    T* GetMemory(){ return memory; }
-    ~PoolAllocator<T>(){
+    void* Allocate() {
+        if(freeBlocks.empty())
+        {
+            throw AllocatorOutOfMemoryException();
+        }
+        void* allocatedPlace = *freeBlocks.begin();
+        freeBlocks.erase(freeBlocks.begin());
+        return allocatedPlace;
+    }
+    void Deallocate(void* ptr) {
+        freeBlocks.insert(reinterpret_cast<u8*>(ptr));
+    }
+    ~PoolAllocator() {
         delete [] memory;
+    }
+    void* GetMemory() { return memory; }
+    usize GetChunkSize() { return sizeof(T); }
+    usize GetChunksPerBlock() { return chunksPerBlock; }
+protected:
+    void PushFreeBlocks() {
+        for(usize i = 0; i < chunksPerBlock; ++i)
+        {
+            freeBlocks.insert(memory + (i * sizeof(T)));
+        }
     }
 };
 

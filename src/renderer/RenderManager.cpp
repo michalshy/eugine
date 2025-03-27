@@ -4,6 +4,7 @@
 #include "gl_demo/RendererGLDemo.hpp"
 #include "gl_renderer/RendererGL.hpp"
 #include "directx_renderer/RendererDX.hpp"
+#include "diagnostic/logger/Logger.hpp"
 #include "renderer/common/RendererStructs.hpp"
 
 RenderManager::~RenderManager()
@@ -26,7 +27,6 @@ bool RenderManager::StartUp()
 
 bool RenderManager::ShutDown()
 {
-    
     // Cleanup glfw
     glfwDestroyWindow(window);
     glfwTerminate();
@@ -110,37 +110,60 @@ bool RenderManager::ChooseRenderer()
         if(isDemo == "y")
         {
             //allocate memory for demo renderer
-            void* addr = allocator.Alloc(sizeof(RendererGLDemo));
+            try {
+                void* addr = allocator.Alloc(sizeof(RendererGLDemo));
+                if(addr != nullptr) //if success
+                {
+                    //allocate new object at address
+                    //IMPORTANT: THIS IS NOT SYSCALL
+                    renderer = new (addr) RendererGLDemo(*configManager, window);
+                }
+                else 
+                {
+                    return false;
+                }
+            } catch (std::exception& e) {
+                Logger::LogError(e.what());
+            }
+        }
+        else
+        {
+            //allocate memory for demo renderer
+            try {
+                void* addr = allocator.Alloc(sizeof(RendererGL));
+                if(addr != nullptr) //if success
+                {
+                    //allocate new object at address
+                    //IMPORTANT: THIS IS NOT SYSCALL
+                    renderer = new (addr) RendererGL(*configManager);
+                }
+                else 
+                {
+                    return false;
+                }
+            } catch (std::exception& e) {
+                Logger::LogError(e.what());
+            }
+        }
+    }
+    else if(renderType == RenderType::DIRECTX) //check for direct, other instructions are the same
+    {
+        //allocate memory for demo renderer
+        try {
+            void* addr = allocator.Alloc(sizeof(RendererDX));
             if(addr != nullptr) //if success
             {
                 //allocate new object at address
                 //IMPORTANT: THIS IS NOT SYSCALL
-                renderer = new (addr) RendererGLDemo(*configManager, window);
+                renderer = new (addr) RendererDX();
             }
             else 
             {
                 return false;
             }
+        } catch (std::exception& e) {
+            Logger::LogError(e.what());
         }
-        else
-        {
-            //allocate memory for standard OpenGL renderer
-            void* addr = allocator.Alloc(sizeof(RendererGL));
-            if(addr != nullptr)
-                //allocate new object at address
-                //IMPORTANT: THIS IS NOT SYSCALL
-                renderer = new (addr) RendererGL(*configManager);
-            else
-                return false;
-        }
-    }
-    else if(renderType == RenderType::DIRECTX) //check for direct, other instructions are the same
-    {
-        void* addr = allocator.Alloc(sizeof(RendererDX));
-        if(addr != nullptr)
-            renderer = new (addr) RendererDX();
-        else
-            return false;
     }
     else
     {

@@ -21,14 +21,11 @@ TEST_CASE( "Check stack allocator alignment", "[memory]" ) {
  * @brief Size manipulation 
  */
 StackAllocator stackResize(8);
-TEST_CASE("Check resizing of stack allocator", "[memory]") {
-    u32 size = stackResize.GetMemorySize();
-    void* ptr = stackResize.Alloc(9);
-    REQUIRE(stackResize.GetMemorySize() > size);
-    REQUIRE(stackResize.GetMemorySize() == (2*size));
+TEST_CASE("Check exception", "[memory]") {
+    REQUIRE_THROWS(stackResize.Alloc(9));
 }
 TEST_CASE("Check freeing of stack allocator", "[memory]") {
-    void* ptr = stackResize.Alloc(10);
+    void* ptr = stackResize.Alloc(8);
     stackResize.Free(ptr);
     REQUIRE(stackResize.GetMarker() == ptr);
 }

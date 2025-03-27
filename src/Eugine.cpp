@@ -1,4 +1,5 @@
 #include "Eugine.hpp"
+#include "core/alloc/PoolAllocator.hpp"
 
 Eugine::~Eugine()
 {
@@ -7,6 +8,7 @@ Eugine::~Eugine()
 
 bool Eugine::Boot()
 {
+    PoolAllocator<u32> pool(13);
     if(!configManager.StartUp()) return false;
     
     if(!renderManager.StartUp()) return false;

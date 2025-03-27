@@ -3,6 +3,12 @@
 
 #include "TypeDef.hpp"
 #include "utils/Memory.hpp"
+#include "exceptions/memory/MemoryExceptions.hpp"
+
+/**
+ * @brief Basic Stack Allocator with FIXED size
+ * TODO: provide dynamic resizing
+ */
 
 class StackAllocator
 {
@@ -20,12 +26,7 @@ public:
         u32 currentSize = reinterpret_cast<u8*>(marker) - memory;
         if(currentSize + sizeToAlloc > memorySize)
         {
-            memorySize *= 2;
-            u8* newMemory = new u8[memorySize];
-            CopyMemory(newMemory, memory, currentSize);
-            delete[] memory;
-            marker = AlignPointerForward(newMemory + currentSize, sizeof(usize));
-            memory = newMemory;
+            throw AllocatorOutOfMemoryException();
         }
         void* allocedPlace = marker;
         marker = AlignPointerForward(reinterpret_cast<u8*>(marker) + sizeToAlloc, sizeof(usize));
